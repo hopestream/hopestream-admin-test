@@ -25,15 +25,15 @@
                         <i class="fa fa-lg fa-cloud-upload"></i>&nbsp; Upload
                     </button>
                 </li>
-                <li>
-                    <div class="dropdown">
-                        <a class="btn btn-default dropdown-toggle" type="button" id="organizationDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{ organization.name }} <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="organizationDropdown">
-                            <li><a data-ng-click='vm.logout()'>Sign out</a></li>
-                        </ul>
-                    </div>
+                <li data-uib-dropdown data-is-open="status.isopen">
+                    <a data-uib-dropdown-toggle>
+                        {{ vm.state.organization.name }} <span class="caret"></span>
+                    </a>
+
+                    <ul data-uib-dropdown-menu>
+                        <li><a data-ng-click="vm.logout()">Sign out</a></li>
+                    </ul>
+
                 </li>
             </ul>
         </div>

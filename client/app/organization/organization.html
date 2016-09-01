@@ -1,4 +1,4 @@
-<div ng-show="vm.state.organization" class="container">
+<div class="container" data-ng-if="vm.state.organization">
     <h1>{{vm.state.organization.name}}</h1>
 
     <section class="hs-form">
@@ -37,5 +37,13 @@
                 </div>
             </div>
         </form>
+    </section>
+</div>
+
+<div class="container" data-ng-if="!vm.state.media">
+    <section class="hs-loading-view">
+        <h1>Loading Organization</h1>
+        <p class="lead">Please wait one moment.</p>
+        <span id="spinner" us-spinner></span>
     </section>
 </div>

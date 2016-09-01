@@ -15,10 +15,14 @@
         State.tab = undefined;
 
         State.media = undefined;
+        State.mediaByID = undefined;
         State.series = undefined;
+        State.seriesByID = undefined;
         State.speakers = undefined;
+        State.speakersByID = undefined;
         State.organization = undefined;
         State.topics = undefined;
+        State.topicsByID = undefined;
 
         State.login = function(email, password) {
             return API.session.userLogin(email, password)
@@ -74,25 +78,30 @@
                     ]);
                 });
                 dataSource.callback = function(result) {
-                    var media = result[0].media;
-                    var series = result[1].series;
-                    var speakers = result[2].speakers;
                     var organizations = result[3].organizations;
                     var topics = result[4].topics;
 
-                    State.media = media;
-                    State.series = series;
-                    State.speakers = speakers;
+                    State.media = result[0].media;
+                    State.mediaByID = result[0].mediaByID;
+                    State.series = result[1].series;
+                    State.seriesByID = result[1].seriesByID;
+                    State.speakers = result[2].speakers;
+                    State.speakersByID = result[2].speakersByID;
                     State.organization = organizations.length > 0 && organizations[0];
-                    State.topics = topics;
+                    State.topics = result[4].topics;
+                    State.topicsByID = result[4].topicsByID;
                 };
                 dataSource.refresh();
             } else if (!State.loggedIn && dataSource) {
                 State.media = undefined;
+                State.mediaByID = undefined;
                 State.series = undefined;
+                State.seriesByID = undefined;
                 State.speakers = undefined;
+                State.speakersByID = undefined;
                 State.organization = undefined;
                 State.topics = undefined;
+                State.topicsByID = undefined;
 
                 dataSource.callback = function() {}
                 dataSource = undefined;

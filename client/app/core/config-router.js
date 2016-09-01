@@ -40,6 +40,36 @@
                         controllerAs: 'vm'
                     }
                 }
+            })
+            .state('organization', {
+                url: '/organization',
+                views: {
+                    'navbar': {
+                        templateUrl: 'app/navbar/navbar.html',
+                        controller: 'Navbar',
+                        controllerAs: 'vm'
+                    },
+                    'content': {
+                        templateUrl: 'app/organization/organization.html',
+                        controller: 'Organization',
+                        controllerAs: 'vm'
+                    }
+                }
+            })
+            .state('media', {
+                url: '/media',
+                views: {
+                    'navbar': {
+                        templateUrl: 'app/navbar/navbar.html',
+                        controller: 'Navbar',
+                        controllerAs: 'vm'
+                    },
+                    'content': {
+                        templateUrl: 'app/media/media-list.html',
+                        controller: 'MediaList',
+                        controllerAs: 'vm'
+                    }
+                }
             });
     }
 })();
