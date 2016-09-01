@@ -5,14 +5,20 @@
         .module('app.core')
         .service('State', State);
 
-    State.$inject = ['$rootScope', '$state', 'API'];
+    State.$inject = ['$rootScope', '$state', '$q', 'API'];
 
-    function State($rootScope, $state, API) {
+    function State($rootScope, $state, $q, API) {
         var State = this;
 
         State.user = Lockr.get('State.user');
         State.loggedIn = false;
         State.tab = undefined;
+
+        State.media = undefined;
+        State.series = undefined;
+        State.speakers = undefined;
+        State.organization = undefined;
+        State.topics = undefined;
 
         State.login = function(email, password) {
             return API.session.userLogin(email, password)
@@ -33,7 +39,8 @@
 
         function updateLoggedInState() {
             State.loggedIn = State.user && API.session.userIsLoggedIn;
-            evaluateCurrentlyVisibleView();
+            updateDataSource();
+            updateVisibleView();
         };
 
         var TABS = {
@@ -42,7 +49,7 @@
             'feeds': 'feeds', 'feed-details': 'feeds',
             'usage': 'usage'
         };
-        function evaluateCurrentlyVisibleView() {
+        function updateVisibleView() {
             console.log("Evaluating Current State");
             console.log($state.current.name);
             State.tab = TABS[$state.current.name];
@@ -54,13 +61,51 @@
             }
         };
 
+        var dataSource = undefined;
+        function updateDataSource() {
+            if (State.loggedIn && !dataSource) {
+                dataSource = new HopeStream.AsyncDataSource(function() {
+                    return $q.all([
+                        API.getMedia(),
+                        API.getSeries(),
+                        API.getSpeakers(),
+                        API.getOrganizations(),
+                        API.getTopics(),
+                    ]);
+                });
+                dataSource.callback = function(result) {
+                    var media = result[0].media;
+                    var series = result[1].series;
+                    var speakers = result[2].speakers;
+                    var organizations = result[3].organizations;
+                    var topics = result[4].topics;
+
+                    State.media = media;
+                    State.series = series;
+                    State.speakers = speakers;
+                    State.organization = organizations.length > 0 && organizations[0];
+                    State.topics = topics;
+                };
+                dataSource.refresh();
+            } else if (!State.loggedIn && dataSource) {
+                State.media = undefined;
+                State.series = undefined;
+                State.speakers = undefined;
+                State.organization = undefined;
+                State.topics = undefined;
+
+                dataSource.callback = function() {}
+                dataSource = undefined;
+            }
+        };
+
         $rootScope.$watch(function() { return State.user; }, function() {
             Lockr.set('State.user', State.user);
             updateLoggedInState();
         });
 
         $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-            evaluateCurrentlyVisibleView();
+            updateVisibleView();
         });
     }
 })();

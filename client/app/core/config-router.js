@@ -36,7 +36,7 @@
                     },
                     'content': {
                         templateUrl: 'app/organization/organization.html',
-                        controller: 'OrganizationDetails',
+                        controller: 'Organization',
                         controllerAs: 'vm'
                     }
                 }

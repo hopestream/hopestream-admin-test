@@ -4,7 +4,7 @@
     <section class="hs-form">
         <p class="lead">Details</p>
 
-        <form name="form" novalidate>
+        <form name="form" data-ng-submit="vm.save()" novalidate>
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group" data-ng-class="{ 'has-error': form.name.$invalid && form.name.$touched }">
@@ -32,7 +32,7 @@
 
             <div class="row">
                 <div class="col-sm-12">
-                    <button class="btn btn-primary" data-ng-disabled="form.$invalid" type="submit">Save</button>
+                    <button class="btn btn-primary" data-ng-disabled="form.$invalid || vm.saving" type="submit">Save</button>
                     <span class="hs-form-saving-text" ng-show="vm.saving">Saving...</span>
                 </div>
             </div>
