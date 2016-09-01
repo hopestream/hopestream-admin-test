@@ -35,14 +35,14 @@
                 <tr data-ng-repeat="media in vm.state.media">
                     <td>
                         {{ media.date | date: 'MMM d, yyyy' }}
-                        <small>{{ media.date | date : 'EEEE h:mm a' }}</small>
+                        <small>{{ media.date | date: 'EEEE h:mm a' }}</small>
                     </td>
 
                     <td>{{ media.date }}</td>
 
                     <td>
-                        <a data-ui-sref="media-details({ id: media.id })">
-                            {{ vm.getMediaDisplayName(media) }}
+                        <a data-ui-sref="media({ id: media.id })">
+                            {{ media | mediaDisplayName }}
                         </a>
                     </td>
 

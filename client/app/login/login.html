@@ -13,7 +13,6 @@
 
                         <div class="form-group" data-ng-class="{ 'has-error': form.email.$invalid && form.email.$touched }">
                             <label for="email">E-mail Address</label>
-
                             <input type="email" id="email" class="form-control" name="email" data-ng-model="vm.email" data-ng-trim="true" placeholder="Enter your e-mail address" required>
 
                             <p class="help-block" data-ng-show="form.email.$invalid && form.email.$touched">
@@ -23,7 +22,6 @@
 
                         <div class="form-group" data-ng-class="{ 'has-error' : form.password.$invalid && form.password.$touched }">
                             <label for="password">Password</label>
-
                             <input type="password" id="password" class="form-control" name="password" data-ng-model="vm.password" data-ng-trim="true" placeholder="Enter a password" required>
 
                             <p class="help-block" data-ng-show="form.password.$invalid && form.password.$touched">

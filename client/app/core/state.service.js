@@ -1,6 +1,13 @@
 (function() {
     'use strict';
 
+    var TABS = {
+        'home': 'organization', 'organization': 'organization',
+        'media-list': 'media', 'media': 'media', 'upload': 'media',
+        'feeds': 'feeds', 'feed-details': 'feeds',
+        'usage': 'usage'
+    };
+
     angular
         .module('app.core')
         .service('State', State);
@@ -47,12 +54,6 @@
             updateVisibleView();
         };
 
-        var TABS = {
-            'home': 'organization', 'organization': 'organization',
-            'media': 'media', 'media-details': 'media', 'upload': 'media',
-            'feeds': 'feeds', 'feed-details': 'feeds',
-            'usage': 'usage'
-        };
         function updateVisibleView() {
             console.log("Evaluating Current State");
             console.log($state.current.name);

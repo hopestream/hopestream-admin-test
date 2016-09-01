@@ -35,11 +35,13 @@
     <script src="vendor/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script src="vendor/angular-datatables/dist/angular-datatables.min.js"></script>
     <script src="vendor/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.min.js"></script>
-    <script src="vendor/bootstrap-ui-datetime-picker/dist/datetime-picker.min.js"></script>
     <script src="vendor/spin.js/spin.min.js"></script>
     <script src="vendor/angular-spinner/angular-spinner.min.js"></script>
     <script src="vendor/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="vendor/bootstrap-ui-datetime-picker/dist/datetime-picker.min.js"></script>
+    <script src="vendor/hashids/lib/hashids.min.js"></script>
     <script src="vendor/lockr/lockr.min.js"></script>
+    <script src="vendor/toastr/toastr.min.js"></script>
 
     <!-- models -->
     <script src="static/js/hopestream/models/user.js"></script>
@@ -60,6 +62,9 @@
     <script src="app/core/api.service.js"></script>
     <script src="app/core/config-router.js"></script>
     <script src="app/core/config-spinner.js"></script>
+    <script src="app/core/config-toastr.js"></script>
+    <script src="app/core/constants.js"></script>
+    <script src="app/core/hash.service.js"></script>
     <script src="app/core/session.service.js"></script>
     <script src="app/core/state.service.js"></script>
 
@@ -69,8 +74,12 @@
 
     <!-- navbar module -->
     <script src="app/media/media.module.js"></script>
+    <script src="app/media/media.js"></script>
+    <script src="app/media/media-display-name.filter.js"></script>
+    <script src="app/media/media-form.directive.js"></script>
     <script src="app/media/media-list.js"></script>
     <script src="app/media/media-status.directive.js"></script>
+    <script src="app/media/media-status-description.filter.js"></script>
 
     <!-- navbar module -->
     <script src="app/navbar/navbar.module.js"></script>

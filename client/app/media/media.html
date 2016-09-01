@@ -1,0 +1,52 @@
+<div class="container" data-ng-if="vm.media">
+    <p><a data-ui-sref="media-list"><i class="fa fa-angle-left"></i> &nbsp;Back to Media List</a></p>
+
+    <h1>{{ vm.media | mediaDisplayName }}</h1>
+
+    <p class="hs-page-subheading">
+        <span data-ng-if="vm.media.date">{{ vm.media.date | date: 'EEEE MMM d, yyyy' }}</span>
+        <span data-ng-if="vm.media.date">{{ vm.media.date | date: 'h:mm a' }}</span>
+    </p>
+
+    <section class="hs-media-status">
+        <hs-media-status status="{{ vm.media.status }}"></hs-media-status>
+        <span class="hs-media-status-description">{{ vm.media.status | mediaStatusDescription }}</span>
+    </section>
+
+    <div class="hs-expand-collapse-all-buttons">
+        <button class="btn btn-default" data-ng-click="
+            vm.isDetailsSectionCollapsed   = false;
+        ">
+            <i class="fa fa-2x fa-angle-down"></i>
+        </button>
+
+        <button class="btn btn-default" data-ng-click="
+            vm.isDetailsSectionCollapsed   = true;
+        ">
+            <i class="fa fa-2x fa-angle-up"></i>
+        </button>
+    </div>
+
+    <section class="hs-content-section">
+        <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isDetailsSectionCollapsed = !vm.isDetailsSectionCollapsed">
+            <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isDetailsSectionCollapsed"></i>
+            <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isDetailsSectionCollapsed"></i>
+        </button>
+
+        <h2>Details</h2>
+
+        <div data-uib-collapse="vm.isDetailsSectionCollapsed">
+            <hs-media-form media-id="{{ vm.id }}"></hs-media-form>
+        </div>
+    </section>
+
+    <p><a data-ui-sref="media-list"><i class="fa fa-angle-left"></i> &nbsp;Back to Media List</a></p>
+</div>
+
+<div class="container" data-ng-if="!vm.media">
+    <section class="hs-loading-view">
+        <h1>Loading Details</h1>
+        <p class="lead">Please wait one moment.</p>
+        <span id="spinner" us-spinner></span>
+    </section>
+</div>

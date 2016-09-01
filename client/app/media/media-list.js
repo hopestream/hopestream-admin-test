@@ -27,18 +27,7 @@
             DTColumnDefBuilder.newColumnDef(3).withOption('width', '30%'),
             DTColumnDefBuilder.newColumnDef(4).withOption('width', '20%')
         ];
-        vm.getMediaDisplayName = getMediaDisplayName;
         vm.getSpeakerNames = getSpeakerNames;
-
-        function getMediaDisplayName(media) {
-            var name = media.name ? media.name : "Untitled";
-            if (State.seriesByID && media.seriesId) {
-                var series = State.seriesByID[media.seriesId];
-                if (series) { return series.name + ' - ' + name; }
-            }
-
-            return name;
-        }
 
         function getSpeakerNames(media) {
             if (State.speakersByID && media.speakerIds) {

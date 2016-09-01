@@ -56,7 +56,7 @@
                     }
                 }
             })
-            .state('media', {
+            .state('media-list', {
                 url: '/media',
                 views: {
                     'navbar': {
@@ -67,6 +67,21 @@
                     'content': {
                         templateUrl: 'app/media/media-list.html',
                         controller: 'MediaList',
+                        controllerAs: 'vm'
+                    }
+                }
+            })
+            .state('media', {
+                url: '/media/:id',
+                views: {
+                    'navbar': {
+                        templateUrl: 'app/navbar/navbar.html',
+                        controller: 'Navbar',
+                        controllerAs: 'vm'
+                    },
+                    'content': {
+                        templateUrl: 'app/media/media.html',
+                        controller: 'Media',
                         controllerAs: 'vm'
                     }
                 }
