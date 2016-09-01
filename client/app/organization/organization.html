@@ -1,0 +1,41 @@
+<div ng-show="vm.state.organization" class="container">
+    <h1>{{vm.state.organization.name}}</h1>
+
+    <section class="hs-form">
+        <p class="lead">Details</p>
+
+        <form name="form" novalidate>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group" data-ng-class="{ 'has-error': form.name.$invalid && form.name.$touched }">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" class="form-control" name="name" data-ng-model="vm.organization.name" data-ng-trim="true" required></input>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="url">URL</label>
+                        <input type="text" id="url" class="form-control" name="url" data-ng-model="vm.organization.url" data-ng-trim="true" required></input>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" class="form-control" name="description" data-ng-model="vm.organization.description" data-ng-trim="true" data-ng-maxlength="512" placeholder="Enter a description" rows="5"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <button class="btn btn-primary" data-ng-disabled="form.$invalid" type="submit">Save</button>
+                    <span class="hs-form-saving-text" ng-show="vm.saving">Saving...</span>
+                </div>
+            </div>
+        </form>
+    </section>
+</div>
