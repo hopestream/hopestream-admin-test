@@ -17,6 +17,9 @@ HopeStream.APIResponse = function() {
     this.topicsByID = {};
 
     this.users = [];
+
+    this.feeds = [];
+    this.feedsByID = {};
 };
 
 HopeStream.APIResponse.fromJSON = function(json) {
@@ -75,6 +78,15 @@ HopeStream.APIResponse.fromJSON = function(json) {
         if (!user) { continue; }
 
         result.users.push(user);
+    }
+
+    var feeds = json.feeds || [];
+    for (var i = 0; i < feeds.length; i++) {
+        var feed = HopeStream.Feed.fromJSON(feeds[i]);
+        if (!feed) { continue; }
+
+        result.feeds.push(feed);
+        result.feedsByID[feed.id] = feed;
     }
 
     return result;

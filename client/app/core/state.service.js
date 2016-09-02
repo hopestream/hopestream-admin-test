@@ -30,6 +30,8 @@
         State.organization = undefined;
         State.topics = undefined;
         State.topicsByID = undefined;
+        State.feeds = undefined;
+        State.feedByID = undefined;
 
         State.login = function(email, password) {
             return API.session.userLogin(email, password)
@@ -70,13 +72,35 @@
         function updateDataSource() {
             if (State.loggedIn && !dataSource) {
                 dataSource = new HopeStream.AsyncDataSource(function() {
+                    var responses = [];
                     return $q.all([
                         API.getMedia(),
                         API.getSeries(),
                         API.getSpeakers(),
                         API.getOrganizations(),
                         API.getTopics(),
-                    ]);
+                        API.getFeeds()
+                    ])
+                    .then(function(result) {
+                        responses = result;
+
+                        var requests = [];
+                        var feeds = result[5].feeds;
+                        for (var i = 0; i < feeds.length; i++) {
+                            var feed = feeds[i];
+                            requests.push(API.getMediaIDsForFeed(feed));
+                        }
+
+                        return $q.all(requests);
+                    })
+                    .then(function(result) {
+                        var feeds = responses[5].feeds;
+                        for (var i = 0; i < feeds.length; i++) {
+                            feeds[i].mediaIds = result[i].ids;
+                        }
+
+                        return responses;
+                    });
                 });
                 dataSource.callback = function(result) {
                     var organizations = result[3].organizations;
@@ -91,6 +115,8 @@
                     State.organization = organizations.length > 0 && organizations[0];
                     State.topics = result[4].topics;
                     State.topicsByID = result[4].topicsByID;
+                    State.feeds = result[5].feeds;
+                    State.feedByID = result[5].feedsByID;
                 };
                 dataSource.refresh();
             } else if (!State.loggedIn && dataSource) {
@@ -103,6 +129,8 @@
                 State.organization = undefined;
                 State.topics = undefined;
                 State.topicsByID = undefined;
+                State.feeds = undefined;
+                State.feedByID = undefined;
 
                 dataSource.callback = function() {}
                 dataSource = undefined;

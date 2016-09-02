@@ -1,51 +1,112 @@
 <section id="media-details-section-{{ mediaId }}" class="hs-form">
-    <form name="form" novalidate>
+    <form name="form" data-ng-if="vm.media" novalidate>
         <div class="row">
             <div class="col-sm-6">
-                <div data-ng-if="vm.media">
-                    <div class="form-group" data-ng-class="{ 'has-error' : form.name.$invalid && form.name.$touched }">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" class="form-control" name="name" placeholder="Enter a name"
-                            data-ng-model="vm.media.name"
-                            data-ng-trim="true"
-                            data-ng-maxlength="128"
-                            required></input>
+                <div class="form-group" data-ng-class="{ 'has-error' : form.name.$invalid && form.name.$touched }">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" class="form-control" name="name" placeholder="Enter a name"
+                        data-ng-model="vm.media.name"
+                        data-ng-trim="true"
+                        data-ng-maxlength="128"
+                        required></input>
 
-                        <p class="help-block" data-ng-show="form.name.$invalid && form.name.$touched">
-                            Please enter a title.
-                        </p>
-                    </div>
+                    <p class="help-block" data-ng-show="form.name.$invalid && form.name.$touched">
+                        Please enter a title.
+                    </p>
+                </div>
 
-                    <div class="form-group">
-                        <label for="date">Date</label>
+                <div class="form-group">
+                    <label>Series</label><br />
+                    <ul class="list-group" data-ng-if="vm.media.seriesId">
+                        <li class="list-group-item">
+                            {{ vm.state.seriesByID[vm.media.seriesId].name }}
+                            <button type="button" class="close"><span>&times;</span></button>
+                        </li>
+                    </ul>
+                    <button class="btn btn-default" data-ng-if="!vm.media.seriesId" data-ng-click="">
+                        <i class="fa fa-plus"></i> &nbsp;Set Series
+                    </button>
+                </div>
 
-                        <div class="input-group">
-                            <input type="text" id="date" class="form-control" name="date"
-                                data-button-bar="vm.datetimePicker.buttonBar"
-                                data-datepicker-options="vm.datetimePicker.datePicker"
-                                data-datetime-picker="{{ vm.datetimePicker.format }}"
-                                data-is-open="vm.datetimePicker.isOpen"
-                                data-ng-focus="vm.datetimePicker.open($event)"
-                                data-ng-model="vm.datetimePicker.date"></input>
+                <div class="form-group">
+                    <label for="date">Date</label>
 
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" data-ng-click="vm.datetimePicker.open($event)">
-                                    <i class="fa fa-calendar"></i>
-                                </button>
-                            </span>
-                        </div>
+                    <div class="input-group">
+                        <input type="text" id="date" class="form-control" name="date"
+                            data-button-bar="vm.datetimePicker.buttonBar"
+                            data-datepicker-options="vm.datetimePicker.datePicker"
+                            data-datetime-picker="{{ vm.datetimePicker.format }}"
+                            data-is-open="vm.datetimePicker.isOpen"
+                            data-ng-focus="vm.datetimePicker.open($event)"
+                            data-ng-model="vm.datetimePicker.date"></input>
+
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" data-ng-click="vm.datetimePicker.open($event)">
+                                <i class="fa fa-calendar"></i>
+                            </button>
+                        </span>
                     </div>
                 </div>
             </div>
 
             <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="includes">Include In</label><br />
+                    <ul class="list-group">
+                        <li data-ng-if="!vm.media.hidden" class="list-group-item">
+                            HopeStream Mobile App
+                            <button type="button" class="close"><span>&times;</span></button>
+                        </li>
+                        <li data-ng-repeat="feed in vm.state.feeds" data-ng-if="feed.mediaIds.indexOf(vm.media.id) >= 0" class="list-group-item">
+                            {{ feed.title }} - {{ feed.type === 0 ? 'Video Podcast' : 'Audio Podcast' }}
+                            <button type="button" class="close"><span>&times;</span></button>
+                        </li>
+                    </ul>
+                    <button class="btn btn-default" data-ng-click="">
+                        <i class="fa fa-plus"></i> &nbsp;Add
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label>Speakers</label><br />
+                    <ul class="list-group" data-ng-if="vm.media.speakerIds.length">
+                        <li data-ng-repeat="speakerId in vm.media.speakerIds" class="list-group-item">
+                            {{ vm.state.speakersByID[speakerId].name }}
+                            <button type="button" class="close"><span>&times;</span></button>
+                        </li>
+                    </ul>
+                    <button class="btn btn-default" data-ng-hide="vm.media.speakerIds.length >= 2" data-ng-click="">
+                        <i class="fa fa-plus"></i> &nbsp;Add Speaker
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label>Topics</label><br />
+                    <ul class="list-group" data-ng-if="vm.media.topicIds.length">
+                        <li data-ng-repeat="topicId in vm.media.topicIds" class="list-group-item">
+                            {{ vm.state.topicsByID[topicId].name }}
+                            <button type="button" class="close"><span>&times;</span></button>
+                        </li>
+                    </ul>
+                    <button class="btn btn-default" data-ng-hide="vm.media.topicIds.length >= 3" data-ng-click="">
+                        <i class="fa fa-plus"></i> &nbsp;Add Topic
+                    </button>
+                </div>
             </div>
         </div>
 
         <div class="row">
             <div class="col-sm-12">
-                <button class="btn btn-primary" data-ng-disabled="form.$invalid || vm.saving" type="submit">Save</button>
-                <span class="hs-form-saving-text" ng-show="vm.saving">Saving...</span>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" class="form-control" name="description" data-ng-model="vm.media.description" data-ng-trim="true" data-ng-maxlength="512" placeholder="Enter a description" rows="5"></textarea>
+                </div>
             </div>
         </div>
     </form>
