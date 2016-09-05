@@ -17,10 +17,10 @@
         function save() {
             vm.saving = true;
             API.updateOrganization(vm.organization)
-                .then(function(greeting) {
+                .then(function() {
                     vm.saving = false;
                     State.organization = vm.organization;
-                }, function(reason) {
+                }, function() {
                     vm.saving = false;
                 });
         }

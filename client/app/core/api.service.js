@@ -12,10 +12,28 @@
             return HopeStream.APIResponse.fromJSON(result.data);
         };
 
+        var copyProperties = function(source, destination, properties) {
+            for (var i = 0; i < properties.length; i++) {
+                var property = properties[i];
+                if (source[property] !== undefined) { destination[property] = source[property]; }
+            }
+        };
+
         this.session = Session;
 
         this.getMedia = function() {
             return this.session.GET('media').then(parseAPIResponse);
+        };
+
+        this.updateMedia = function(media) {
+            if (!media) { return Promise.reject('No media provided.'); }
+
+            var data = {};
+            copyProperties(media, data, ['name', 'description', 'hidden', 'videoUrl', 'audioUrl', 'streamUrl', 'speakerIds', 'topicIds']);
+            data.date = media.date.getTime();
+            data.seriesId = media.seriesId || null;
+
+            return this.session.PUT('media/' + media.id, {}, {}, data);
         };
 
         this.getSeries = function() {
@@ -23,7 +41,7 @@
         };
 
         this.getSpeakers = function() {
-            return this.session.GET('speakers').then(parseAPIResponse);
+            return this.session.GET('speakers/all').then(parseAPIResponse);
         };
 
         this.getOrganizations = function() {
@@ -34,9 +52,7 @@
             if (!organization) { return Promise.reject('No organization provided.'); }
 
             var data = {};
-            data.name = organization.name || null;
-            data.description = organization.description || null;
-            data.url = organization.url || null;
+            copyProperties(organization, data, 'name', 'description', 'url');
 
             return this.session.PUT('organizations/' + organization.id, {}, {}, data);
         };
@@ -51,12 +67,22 @@
 
         this.getFeeds = function() {
             return this.session.GET('feeds').then(parseAPIResponse);
-        }
+        };
 
         this.getMediaIDsForFeed = function(feed) {
             if (!feed || !feed.id) { return Promise.reject('No feed provided.'); }
 
             return this.session.GET('feeds/' + feed.id + '/media').then(function(result) { return result.data; });
-        }
+        };
+
+        this.addMediaIDForFeed = function(feed, id) {
+            if (!feed || !feed.id) { return Promise.reject('No feed provided.'); }
+            return this.session.PUT('feeds/' + feed.id + '/media', { 'id': id });
+        };
+
+        this.removeMediaIDForFeed = function(feed, id) {
+            if (!feed || !feed.id) { return Promise.reject('No feed provided.'); }
+            return this.session.DELETE('feeds/' + feed.id + '/media', { 'id': id });
+        };
     }
 })();

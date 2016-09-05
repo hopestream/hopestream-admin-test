@@ -7,6 +7,7 @@
         'datatables.bootstrap',
         'ui.bootstrap',
         'ui.bootstrap.datetimepicker',
-        'ui.router'
+        'ui.router',
+        'vs-repeat'
     ]);
 })();

@@ -15,6 +15,7 @@ HopeStream.APIResponse = function() {
 
     this.topics = [];
     this.topicsByID = {};
+    this.topicsByCategory = {};
 
     this.users = [];
 
@@ -34,6 +35,8 @@ HopeStream.APIResponse.fromJSON = function(json) {
 
         result.topics.push(topic);
         result.topicsByID[topic.id] = topic;
+        if (!result.topicsByCategory[topic.category]) { result.topicsByCategory[topic.category] = []; }
+        result.topicsByCategory[topic.category].push(topic);
     }
 
     var organizations = json.organizations || [];

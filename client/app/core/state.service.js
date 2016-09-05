@@ -30,8 +30,9 @@
         State.organization = undefined;
         State.topics = undefined;
         State.topicsByID = undefined;
+        State.topicsByCategory = undefined;
         State.feeds = undefined;
-        State.feedByID = undefined;
+        State.feedsByID = undefined;
 
         State.login = function(email, password) {
             return API.session.userLogin(email, password)
@@ -115,8 +116,9 @@
                     State.organization = organizations.length > 0 && organizations[0];
                     State.topics = result[4].topics;
                     State.topicsByID = result[4].topicsByID;
+                    State.topicsByCategory = result[4].topicsByCategory;
                     State.feeds = result[5].feeds;
-                    State.feedByID = result[5].feedsByID;
+                    State.feedsByID = result[5].feedsByID;
                 };
                 dataSource.refresh();
             } else if (!State.loggedIn && dataSource) {
@@ -129,8 +131,9 @@
                 State.organization = undefined;
                 State.topics = undefined;
                 State.topicsByID = undefined;
+                State.topicsByCategory = undefined;
                 State.feeds = undefined;
-                State.feedByID = undefined;
+                State.feedsByID = undefined;
 
                 dataSource.callback = function() {}
                 dataSource = undefined;
