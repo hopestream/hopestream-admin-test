@@ -5,21 +5,23 @@
         .module('app.core')
         .service('Session', Session);
 
-    Session.$inject = ['$http'];
+    Session.$inject = ['$http', 'Upload'];
 
-    function Session($http) {
+    function Session($http, Upload) {
         var API_URL = 'http://localhost:3000/';
         var OAUTH_CLIENT_BASE_64 = btoa('hopestream-ios:jquo64ym8hvje2pxepto9');
 
         var getAccessToken = function() { return Lockr.get('Session.access-token'); }
         var setAccessToken = function(accessToken) { Lockr.set('Session.access-token', accessToken); }
 
-        var request = function(method, path, params, headers, data) {
+        var request = function(service, method, path, params, headers, data) {
             params = params || {};
             headers = headers || {};
 
-            headers['Accept'] = 'application/json';
-            if (!headers['Content-Type']) { headers['Content-Type'] = 'application/json'; }
+            if (service === $http) {
+                headers['Accept'] = 'application/json';
+                if (!headers['Content-Type']) { headers['Content-Type'] = 'application/json'; }
+            }
 
             var accessToken = getAccessToken();
             if (accessToken && !headers['Authorization']) { headers['Authorization'] = 'Bearer ' + accessToken; }
@@ -28,7 +30,7 @@
             if (path.lastIndexOf('oauth/token', 0) != 0) { url = url + 'admin/api/1/'; }
             url = url + path;
 
-            return $http({
+            return service({
                 'url': url,
                 'method': method,
                 'headers': headers,
@@ -62,19 +64,23 @@
         };
 
         this.GET = function(path, params, headers, data) {
-            return request("GET", path, params, headers, data);
+            return request($http, "GET", path, params, headers, data);
         };
 
         this.POST = function(path, params, headers, data) {
-            return request("POST", path, params, headers, data);
+            return request($http, "POST", path, params, headers, data);
         };
 
         this.PUT = function(path, params, headers, data) {
-            return request("PUT", path, params, headers, data);
+            return request($http, "PUT", path, params, headers, data);
         };
 
         this.DELETE = function(path, params, headers, data) {
-            return request("DELETE", path, params, headers, data);
+            return request($http, "DELETE", path, params, headers, data);
+        };
+
+        this.UPLOAD = function(path, params, headers, data) {
+            return request(Upload.upload, "POST", path, params, headers, data);
         };
     }
 })();

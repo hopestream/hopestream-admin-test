@@ -36,6 +36,10 @@
             return this.session.PUT('media/' + media.id, {}, {}, data);
         };
 
+        this.uploadImageForMedia = function(media, image) {
+            return this.session.UPLOAD('media/' + media.id + '/image', {}, {}, { 'image': image });
+        }
+
         this.getSeries = function() {
             return this.session.GET('series').then(parseAPIResponse);
         };

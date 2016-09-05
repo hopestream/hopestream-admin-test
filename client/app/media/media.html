@@ -40,6 +40,28 @@
         </div>
     </section>
 
+    <section class="hs-content-section">
+        <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isImageSectionCollapsed = !vm.isImageSectionCollapsed">
+            <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isImageSectionCollapsed"></i>
+            <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isImageSectionCollapsed"></i>
+        </button>
+
+        <h2>Image</h2>
+
+        <div class="row" data-uib-collapse="vm.isImageSectionCollapsed">
+            <div class="col-sm-4 hs-media-image-section-instructions">
+                <p>Upload an image for this media.</p>
+                <p>Image must be in <strong>.jpg</strong> format.</p>
+
+                <hs-media-image-upload media-id="{{ vm.id }}"></hs-media-image-upload>
+            </div>
+
+            <div class="col-sm-8 hs-media-image-section-preview" data-ng-if="vm.shouldShowMediaImage">
+                <img class="img-responsive" alt="Poster Image" data-ng-src="{{ vm.imageFileUrl }}" data-hs-media-image>
+            </div>
+        </div>
+    </section>
+
     <p><a data-ui-sref="media-list"><i class="fa fa-angle-left"></i> &nbsp;Back to Media List</a></p>
 </div>
 
