@@ -1,6 +1,4 @@
 <section id="media-details-section-{{ mediaId }}" class="hs-form">
-    <p class="hs-form-saving-text">{{ vm.saving ? "Saving Changes..." : "All Changes Saved." }}</p>
-
     <form name="form" data-ng-if="vm.media" novalidate>
         <div class="row">
             <div class="col-sm-6">
@@ -109,6 +107,15 @@
                     <label for="description">Description</label>
                     <textarea id="description" class="form-control" name="description" data-ng-model="vm.media.description" data-ng-trim="true" data-ng-maxlength="512" placeholder="Enter a description" rows="5"></textarea>
                 </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <button  type="submit" class="btn btn-primary" data-ng-disabled="form.$invalid || vm.saving || !vm.dirty" data-ng-click="vm.save()">Save</button>
+                <span class="hs-form-saving-text">
+                    {{ vm.saving ? "Saving Changes..." : vm.dirty ? "" : "All Changes Saved." }}
+                </span>
             </div>
         </div>
     </form>

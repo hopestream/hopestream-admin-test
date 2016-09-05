@@ -106,23 +106,7 @@
             if (index >= 0) { vm.media.topicIds.splice(index, 1); }
         }
 
-        var initializing = true;
-        $scope.$watch('vm.media.name', formDidUpdate);
-        $scope.$watch('vm.media.description', formDidUpdate);
-        $scope.$watch('vm.media.hidden', formDidUpdate);
-        $scope.$watch('vm.media.seriesId', formDidUpdate);
-        $scope.$watch('vm.media.speakerIds.length', formDidUpdate);
-        $scope.$watch('vm.media.topicIds.length', formDidUpdate);
-        $scope.$watch('vm.datetimePicker.date', formDidUpdate);
-        $scope.$watch('vm.feeds.length', formDidUpdate);
-        function formDidUpdate() {
-            if (initializing) { $timeout(function() { initializing = false; }, 0); return; }
-
-            vm.dirty = true;
-            saveChanges();
-        }
-
-        function saveChanges() {
+        vm.save = function() {
             if (vm.saving) { return; }
             vm.saving = true;
             vm.dirty = false;
@@ -160,15 +144,29 @@
             }
 
             $q.all(promises).then(function() { completeSave(false); }, function() { completeSave(true); });
-        }
+        };
 
         function completeSave(error) {
             if (error) { vm.dirty = true; }
 
             $timeout(function() {
                 vm.saving = false;
-                if (vm.dirty) { saveChanges(); }
+                if (vm.dirty) { vm.save(); }
             }, error ? 2000 : 500);
+        }
+
+        var initializing = true;
+        $scope.$watch('vm.media.name', formDidUpdate);
+        $scope.$watch('vm.media.description', formDidUpdate);
+        $scope.$watch('vm.media.hidden', formDidUpdate);
+        $scope.$watch('vm.media.seriesId', formDidUpdate);
+        $scope.$watch('vm.media.speakerIds.length', formDidUpdate);
+        $scope.$watch('vm.media.topicIds.length', formDidUpdate);
+        $scope.$watch('vm.datetimePicker.date', formDidUpdate);
+        $scope.$watch('vm.feeds.length', formDidUpdate);
+        function formDidUpdate() {
+            if (initializing) { $timeout(function() { initializing = false; }, 0); return; }
+            vm.dirty = true;
         }
     }
 })();
