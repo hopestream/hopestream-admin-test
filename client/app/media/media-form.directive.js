@@ -17,9 +17,9 @@
         };
     }
 
-    MediaFormController.$inject = ['$scope', '$timeout', '$q', 'State', 'API'];
+    MediaFormController.$inject = ['$scope', '$timeout', '$q', 'API', 'State'];
 
-    function MediaFormController($scope, $timeout, $q, State, API) {
+    function MediaFormController($scope, $timeout, $q, API, State) {
         var vm = this;
         vm.state = State;
         vm.saving = false;

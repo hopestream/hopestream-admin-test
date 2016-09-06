@@ -75,7 +75,6 @@
 
         this.getMediaIDsForFeed = function(feed) {
             if (!feed || !feed.id) { return Promise.reject('No feed provided.'); }
-
             return this.session.GET('feeds/' + feed.id + '/media').then(function(result) { return result.data; });
         };
 
@@ -88,5 +87,10 @@
             if (!feed || !feed.id) { return Promise.reject('No feed provided.'); }
             return this.session.DELETE('feeds/' + feed.id + '/media', { 'id': id });
         };
+
+        this.getUsageForMedia = function(media) {
+            if (!media || !media.id) { return Promise.reject('No media provided.'); }
+            return this.session.GET('usage', { mediaId: media.id }).then(function(result) { return result.data.usage; });
+        }
     }
 })();

@@ -7,6 +7,7 @@
         'datatables',
         'datatables.bootstrap',
         'ngFileUpload',
+        'nvd3',
         'ui.bootstrap',
         'ui.bootstrap.datetimepicker',
         'ui.router',

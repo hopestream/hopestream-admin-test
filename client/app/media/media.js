@@ -12,9 +12,9 @@
         .module('app.media')
         .controller('Media', Media);
 
-    Media.$inject = ['$rootScope', '$stateParams', '$timeout', 'toastr', 'State', 'Hash'];
+    Media.$inject = ['$rootScope', '$stateParams', '$timeout', 'toastr', 'API', 'State', 'Hash'];
 
-    function Media($rootScope, $stateParams, $timeout, toastr, State, Hash) {
+    function Media($rootScope, $stateParams, $timeout, toastr, API, State, Hash) {
         var vm = this;
         var timeout = null;
         vm.state = State;
@@ -75,12 +75,55 @@
         }
 
         $rootScope.$watch(function() { return State.mediaByID && State.mediaByID[vm.id]; }, function() {
+            var previous = vm.media;
             vm.media = State.mediaByID && State.mediaByID[vm.id];
 
-            if (vm.media) {
+            if (vm.media && !previous) {
                 updateVideoURLs();
                 updateAudioURLs();
+                updateUsageStatistics();
             }
         });
+
+        vm.playcountData = [];
+        vm.playcountChartOptions = HopeStream.PLAYCOUNT_CHART_OPTIONS;
+        vm.bandwidthData = [];
+        vm.bandwidthChartOptions = HopeStream.BANDWIDTH_CHART_OPTIONS;
+        vm.usageTotals = { bandwidth: 0, playcountAudio: 0, playcountVideo: 0, playcountHLS: 0 };
+
+        function updateUsageStatistics() {
+            API.getUsageForMedia(vm.media)
+                .then(function(usage) {
+                    vm.usageData = usage;
+
+                    vm.playcountData = [
+                        { key: 'Audio Plays', values: [] },
+                        { key: 'Video Plays', values: [] },
+                        { key: 'HLS Plays', values: [] }];
+
+                    vm.bandwidthData = [
+                        { key: 'Bandwidth (GB)', values: [] }];
+
+                    for (var i = 0; i < usage.length; i++) {
+                        var data = usage[i];
+
+                        // Trim the time portion of the date: 2015-09-02T04:00:00.000Z -> 2015-09-02
+                        var trimmed = new Date(data[0]).toISOString().substring(0, 10);
+                        var date = new Date(trimmed).getTime() + (12 * 60 * 60 * 1000);  // Add 12 hours so the actual date is correct
+
+                        vm.playcountData[0].values.push([ date, data[2] ]);
+                        vm.playcountData[1].values.push([ date, data[3] ]);
+                        vm.playcountData[2].values.push([ date, data[4] ]);
+                        vm.bandwidthData[0].values.push([ date, data[1] / BYTES_PER_GIGABYTE ]);
+
+                        vm.usageTotals.bandwidth      += usage[1];
+                        vm.usageTotals.playcountAudio += usage[2];
+                        vm.usageTotals.playcountVideo += usage[3];
+                        vm.usageTotals.playcountHLS   += usage[4];
+                    }
+
+                    vm.isUsageLoading = false;
+                })
+        }
     };
 })();

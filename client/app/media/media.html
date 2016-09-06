@@ -171,7 +171,51 @@
                 </div>
             </div>
         </div>
+    </section>
 
+
+    <!-- PLAY COUNTS -->
+    <section class="hs-content-section" data-ng-if="vm.media.status === 3">
+        <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isPlaysSectionCollapsed = !vm.isPlaysSectionCollapsed">
+            <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isPlaysSectionCollapsed"></i>
+            <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isPlaysSectionCollapsed"></i>
+        </button>
+
+        <h2>Plays</h2>
+
+        <div data-uib-collapse="vm.isPlaysSectionCollapsed">
+            <nvd3 options="vm.playcountChartOptions" data="vm.playcountData"></nvd3>
+            <div class="hs-chart-instructions">
+                <h3>Instructions</h3>
+                <ul>
+                    <li>Hover over the chart to view audio, video, and HLS play counts for each date.</li>
+                    <li>In the top-right corner, click the legend items to toggle lines on/off.</li>
+                    <li>Click and drag in the timeline (smaller bottom graph) to adjust what is shown in the main graph.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- BANDWIDTH -->
+    <section class="hs-content-section" data-ng-if="vm.media.status === 3">
+        <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isBandwidthSectionCollapsed = !vm.isBandwidthSectionCollapsed">
+            <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isBandwidthSectionCollapsed"></i>
+            <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isBandwidthSectionCollapsed"></i>
+        </button>
+
+        <h2>Bandwidth</h2>
+
+        <div data-uib-collapse="vm.isBandwidthSectionCollapsed">
+            <nvd3 options="vm.bandwidthChartOptions" data="vm.bandwidthData"></nvd3>
+            <div class="hs-chart-instructions">
+                <h3>Instructions</h3>
+                <ul>
+                    <li>Hover over the chart to view bandwidth (gigabytes) for each date.</li>
+                    <li>Click and drag in the timeline (smaller bottom graph) to adjust what is shown in the main graph.</li>
+                </ul>
+            </div>
+        </div>
     </section>
 
     <p><a data-ui-sref="media-list"><i class="fa fa-angle-left"></i> &nbsp;Back to Media List</a></p>
