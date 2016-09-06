@@ -218,6 +218,88 @@
         </div>
     </section>
 
+
+    <!-- USAGE DATA -->
+    <section class="hs-content-section" data-ng-if="vm.media.status === 3">
+        <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isUsageSectionCollapsed = !vm.isUsageSectionCollapsed">
+            <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isUsageSectionCollapsed"></i>
+            <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isUsageSectionCollapsed"></i>
+        </button>
+
+        <h2>Usage Data</h2>
+
+        <div id="media-usage-section" data-uib-collapse="vm.isUsageSectionCollapsed">
+            <div class="row" data-ng-if="vm.isUsageLoading">
+                <div class="col-sm-12"><p class="hs-form-loading-view">Loading Usage...</p></div>
+            </div>
+
+            <div class="row" data-ng-if="!vm.isUsageLoading">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-12"><h3>Totals</h3></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-3 hs-media-usage-total-item">
+                            Bandwidth <span>{{ vm.usageTotals.bandwidth | fileSize }}</span>
+                        </div>
+                        <div class="col-sm-3 hs-media-usage-total-item">
+                            Audio Plays <span>{{ vm.usageTotals.playcountAudio | number }}</span>
+                        </div>
+                        <div class="col-sm-3 hs-media-usage-total-item">
+                            Video Plays <span>{{ vm.usageTotals.playcountVideo | number }}</span>
+                        </div>
+                        <div class="col-sm-3 hs-media-usage-total-item">
+                            HLS Plays <span>{{ vm.usageTotals.playcountHLS | number }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="table-responsive hs-table col-sm-12">
+                    <table id="usage-list" class="display table table-bordered table-striped" data-datatable="ng" data-dt-options="vm.dtOptions" data-dt-column-defs="vm.dtColumnDefs" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>UTC Timestamp</th>
+                                <th>Bandwidth</th>
+                                <th>Bandwidth Bytes</th>
+                                <th>Audio Plays</th>
+                                <th>Video Plays</th>
+                                <th>HLS Plays</th>
+                            </tr>
+                        </thead>
+
+                        <tfoot>
+                            <tr>
+                                <th>Date</th>
+                                <th>UTC Timestamp</th>
+                                <th>Bandwidth</th>
+                                <th>Bandwidth Bytes</th>
+                                <th>Audio Plays</th>
+                                <th>Video Plays</th>
+                                <th>HLS Plays</th>
+                            </tr>
+                        </tfoot>
+
+                        <tbody>
+                            <tr data-ng-repeat="usage in vm.usageData">
+                                <td>{{ usage.date | date : 'MMM&nbsp;d,&nbsp;yyyy - EEEE' : '-0000' }}</td>
+                                <td>{{ usage.date }}</td>
+                                <td>{{ usage[1] | fileSize }}</td>
+                                <td>{{ usage[1] }}</td>
+                                <td>{{ usage[2] | number }}</td>
+                                <td>{{ usage[3] | number }}</td>
+                                <td>{{ usage[4] | number }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <p><a data-ui-sref="media-list"><i class="fa fa-angle-left"></i> &nbsp;Back to Media List</a></p>
 </div>
 

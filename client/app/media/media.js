@@ -12,9 +12,9 @@
         .module('app.media')
         .controller('Media', Media);
 
-    Media.$inject = ['$rootScope', '$stateParams', '$timeout', 'toastr', 'API', 'State', 'Hash'];
+    Media.$inject = ['$rootScope', '$stateParams', '$timeout', 'toastr', 'API', 'State', 'Hash', 'DTOptionsBuilder', 'DTColumnDefBuilder'];
 
-    function Media($rootScope, $stateParams, $timeout, toastr, API, State, Hash) {
+    function Media($rootScope, $stateParams, $timeout, toastr, API, State, Hash, DTOptionsBuilder, DTColumnDefBuilder) {
         var vm = this;
         var timeout = null;
         vm.state = State;
@@ -31,6 +31,17 @@
 
             vm.shouldShowMediaImage = false;
             $timeout(function() { vm.shouldShowMediaImage = true; }, 0);
+        });
+
+        $rootScope.$watch(function() { return State.mediaByID && State.mediaByID[vm.id]; }, function() {
+            var previous = vm.media;
+            vm.media = State.mediaByID && State.mediaByID[vm.id];
+
+            if (vm.media && !previous) {
+                updateVideoURLs();
+                updateAudioURLs();
+                updateUsageStatistics();
+            }
         });
 
         var updateVideoURLs = function() {
@@ -74,17 +85,6 @@
             toastr.error('<i class="fa fa-exclamation-triangle fa-lg"></i>&nbsp; Failed to copy to clipboard: ' + error);
         }
 
-        $rootScope.$watch(function() { return State.mediaByID && State.mediaByID[vm.id]; }, function() {
-            var previous = vm.media;
-            vm.media = State.mediaByID && State.mediaByID[vm.id];
-
-            if (vm.media && !previous) {
-                updateVideoURLs();
-                updateAudioURLs();
-                updateUsageStatistics();
-            }
-        });
-
         vm.playcountData = [];
         vm.playcountChartOptions = HopeStream.PLAYCOUNT_CHART_OPTIONS;
         vm.bandwidthData = [];
@@ -110,20 +110,46 @@
                         // Trim the time portion of the date: 2015-09-02T04:00:00.000Z -> 2015-09-02
                         var trimmed = new Date(data[0]).toISOString().substring(0, 10);
                         var date = new Date(trimmed).getTime() + (12 * 60 * 60 * 1000);  // Add 12 hours so the actual date is correct
+                        data.date = date;
 
                         vm.playcountData[0].values.push([ date, data[2] ]);
                         vm.playcountData[1].values.push([ date, data[3] ]);
                         vm.playcountData[2].values.push([ date, data[4] ]);
                         vm.bandwidthData[0].values.push([ date, data[1] / BYTES_PER_GIGABYTE ]);
 
-                        vm.usageTotals.bandwidth      += usage[1];
-                        vm.usageTotals.playcountAudio += usage[2];
-                        vm.usageTotals.playcountVideo += usage[3];
-                        vm.usageTotals.playcountHLS   += usage[4];
+                        vm.usageTotals.bandwidth      += data[1];
+                        vm.usageTotals.playcountAudio += data[2];
+                        vm.usageTotals.playcountVideo += data[3];
+                        vm.usageTotals.playcountHLS   += data[4];
                     }
 
                     vm.isUsageLoading = false;
                 })
         }
+
+        vm.dtOptions = DTOptionsBuilder.newOptions()
+            .withBootstrap()
+            .withOption('lengthMenu', [[5, 10, 25, 50, 100, -1], [5, 10, 25, 50, 100, "All"]])
+            .withOption('order', [[ 1, "desc" ]])
+            .withDisplayLength(5);
+
+        vm.dtColumnDefs = [
+            // Sort first column [0] (date) by the invisible second column [1] (utc timestamp)
+            DTColumnDefBuilder.newColumnDef(0).withOption('orderData', [1]),
+            DTColumnDefBuilder.newColumnDef(1).notVisible(),
+            DTColumnDefBuilder.newColumnDef(1).withOption('searchable', false),
+
+            // Sort third column [2] (bandwidth) by the invisible fourth column [3] (bytes)
+            DTColumnDefBuilder.newColumnDef(2).withOption('orderData', [3]),
+            DTColumnDefBuilder.newColumnDef(3).notVisible(),
+            DTColumnDefBuilder.newColumnDef(3).withOption('searchable', false),
+
+            // Column width percentages
+            DTColumnDefBuilder.newColumnDef(0).withOption('width', '28%'),
+            DTColumnDefBuilder.newColumnDef(2).withOption('width', '18%'),
+            DTColumnDefBuilder.newColumnDef(3).withOption('width', '18%'),
+            DTColumnDefBuilder.newColumnDef(4).withOption('width', '18%'),
+            DTColumnDefBuilder.newColumnDef(5).withOption('width', '18%')
+        ];
     };
 })();
