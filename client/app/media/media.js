@@ -33,13 +33,32 @@
             $timeout(function() { vm.shouldShowMediaImage = true; }, 0);
         });
 
-        vm.videoPlayerUrl = STATIC_HOPESTREAM_PLAYER_URL + vm.hash;
-        vm.videoURLs = [
-            { label: 'Video ID', url: vm.hash },
-            { label: 'Video Player', url: STATIC_HOPESTREAM_PLAYER_URL + vm.hash },
-            { label: 'Video Stream', url: STATIC_HOPESTREAM_MEDIA_URL + vm.hash + '/master.m3u8' },
-            { label: 'Video File', url: STATIC_HOPESTREAM_MEDIA_URL + vm.hash + '/video-default.mp4' }
-        ];
+        var updateVideoURLs = function() {
+            vm.videoPlayerUrl = STATIC_HOPESTREAM_PLAYER_URL + vm.hash;
+            vm.videoURLs = [
+                { label: 'Video ID', url: vm.hash },
+                { label: 'Video Player', url: STATIC_HOPESTREAM_PLAYER_URL + vm.hash },
+                { label: 'Video Stream', url: STATIC_HOPESTREAM_MEDIA_URL + vm.hash + '/master.m3u8' },
+                { label: 'Video File', url: STATIC_HOPESTREAM_MEDIA_URL + vm.hash + '/video-default.mp4' }
+            ];
+        };
+
+        var updateAudioURLs = function() {
+            vm.audioURLs = [];
+            if (vm.media.type && vm.media.type == 1) {
+                vm.audioURLs.push({ label: 'Audio ID', url: vm.hash });
+                vm.audioURLs.push({ label: 'Audio Stream (Recommended)', url: STATIC_HOPESTREAM_MEDIA_URL + vm.hash + '/master.m3u8' });
+            }
+            vm.audioURLs.push({ label: 'Audio File', url: STATIC_HOPESTREAM_MEDIA_URL + vm.hash + '/audio.mp3' });
+
+            vm.audioPlayerOptions = {
+                file: (vm.media.type == 1) ?
+                    STATIC_HOPESTREAM_MEDIA_URL + vm.hash + '/master.m3u8' :
+                    STATIC_HOPESTREAM_MEDIA_URL + vm.hash + '/audio.mp3',
+                aspectratio: "0",
+                height: "33"
+            }
+        }
 
         vm.copyToClipboardSuccess = function() {
             toastr.options.timeOut = 2000;
@@ -57,6 +76,11 @@
 
         $rootScope.$watch(function() { return State.mediaByID && State.mediaByID[vm.id]; }, function() {
             vm.media = State.mediaByID && State.mediaByID[vm.id];
+
+            if (vm.media) {
+                updateVideoURLs();
+                updateAudioURLs();
+            }
         });
     };
 })();
