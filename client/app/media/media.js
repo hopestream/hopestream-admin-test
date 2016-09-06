@@ -33,6 +33,28 @@
             $timeout(function() { vm.shouldShowMediaImage = true; }, 0);
         });
 
+        vm.videoPlayerUrl = STATIC_HOPESTREAM_PLAYER_URL + vm.hash;
+        vm.videoURLs = [
+            { label: 'Video ID', url: vm.hash },
+            { label: 'Video Player', url: STATIC_HOPESTREAM_PLAYER_URL + vm.hash },
+            { label: 'Video Stream', url: STATIC_HOPESTREAM_MEDIA_URL + vm.hash + '/master.m3u8' },
+            { label: 'Video File', url: STATIC_HOPESTREAM_MEDIA_URL + vm.hash + '/video-default.mp4' }
+        ];
+
+        vm.copyToClipboardSuccess = function() {
+            toastr.options.timeOut = 2000;
+            toastr.options.extendedTimeOut = 1000;
+            toastr.options.positionClass = 'toast-bottom-right';
+            toastr.info('<i class="fa fa-clipboard fa-lg"></i>&nbsp; Copied to clipboard');
+        }
+
+        vm.copyToClipboardError = function(error) {
+            toastr.options.timeOut = 2000;
+            toastr.options.extendedTimeOut = 1000;
+            toastr.options.positionClass = 'toast-bottom-right';
+            toastr.error('<i class="fa fa-exclamation-triangle fa-lg"></i>&nbsp; Failed to copy to clipboard: ' + error);
+        }
+
         $rootScope.$watch(function() { return State.mediaByID && State.mediaByID[vm.id]; }, function() {
             vm.media = State.mediaByID && State.mediaByID[vm.id];
         });

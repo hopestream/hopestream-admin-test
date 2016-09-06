@@ -27,6 +27,8 @@
         </button>
     </div>
 
+
+    <!-- FORM -->
     <section class="hs-content-section">
         <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isDetailsSectionCollapsed = !vm.isDetailsSectionCollapsed">
             <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isDetailsSectionCollapsed"></i>
@@ -40,6 +42,8 @@
         </div>
     </section>
 
+
+    <!-- IMAGE -->
     <section class="hs-content-section">
         <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isImageSectionCollapsed = !vm.isImageSectionCollapsed">
             <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isImageSectionCollapsed"></i>
@@ -61,6 +65,60 @@
             </div>
         </div>
     </section>
+
+
+    <!-- VIDEO -->
+    <section class="hs-content-section" data-ng-if="vm.media.type === 0">
+            <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isVideoSectionCollapsed = !vm.isVideoSectionCollapsed">
+                <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isVideoSectionCollapsed"></i>
+                <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isVideoSectionCollapsed"></i>
+            </button>
+
+            <h2>Video</h2>
+
+            <section data-uib-collapse="vm.isVideoSectionCollapsed">
+
+                <!-- If status: Error -->
+                <div class="hs-video-player-placeholder" data-ng-if="vm.media.status === 4">
+                    <h3>Video preview not available</h3>
+                    <p>Please upload your media content again.</p>
+                </div>
+
+                <!-- If status: Uploading -->
+                <div class="hs-video-player-placeholder" data-ng-if="vm.media.status === 0">
+                    <h3>Video preview not available</h3>
+                    <p>Your media is currently uploading.</p>
+                </div>
+
+                <!-- If status: Uploaded or Processing -->
+                <div class="hs-video-player-placeholder" data-ng-if="vm.media.status === 1 || vm.media.status === 2">
+                    <h3>Video preview coming soon</h3>
+                    <p>Preview will be available once your media is finished processing.</p>
+                </div>
+
+                <!-- If status: Available -->
+                <div class="hs-video-player" data-ng-if="vm.media.status === 3">
+                    <hs-video-player url="{{ vm.videoPlayerUrl }}"></hs-video-player>
+                </div>
+
+                <h3>URLs</h3>
+
+                <div class="hs-media-url" data-ng-repeat="url in vm.videoURLs">
+                    <label>{{ url.label }}</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="{{ url.url }}" readonly>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default hs-copy-url-button" data-clipboard data-text="url.url"
+                                data-on-copied="vm.copyToClipboardSuccess()"
+                                data-on-error="vm.copyToClipboardError(error)">
+
+                                <i class="fa fa-clipboard"></i>&nbsp; Copy
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </section>
+        </section>
 
     <p><a data-ui-sref="media-list"><i class="fa fa-angle-left"></i> &nbsp;Back to Media List</a></p>
 </div>

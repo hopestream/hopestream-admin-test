@@ -2,6 +2,7 @@
     'use strict';
 
     angular.module('app.core', [
+        'angular-clipboard',
         'angularSpinner',
         'datatables',
         'datatables.bootstrap',
