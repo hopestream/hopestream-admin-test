@@ -26,7 +26,7 @@
         };
 
         this.updateMedia = function(media) {
-            if (!media) { return Promise.reject('No media provided.'); }
+            if (!media || !media.id) { return Promise.reject('No media provided.'); }
 
             var data = {};
             copyProperties(media, data, ['name', 'description', 'hidden', 'videoUrl', 'audioUrl', 'streamUrl', 'speakerIds', 'topicIds']);
@@ -36,9 +36,26 @@
             return this.session.PUT('media/' + media.id, {}, {}, data);
         };
 
-        this.uploadImageForMedia = function(media, image) {
-            return this.session.UPLOAD('media/' + media.id + '/image', {}, {}, { 'image': image });
+        this.updateMediaStatus = function(media, status) {
+            if (!media || !media.id) { return Promise.reject('No media provided.'); }
+            return this.session.PUT('media/' + media.id, {}, {}, { 'status': status });
         }
+
+        this.uploadImageForMedia = function(media, image) {
+            if (!media || !media.id) { return Promise.reject('No media provided.'); }
+            return this.session.UPLOAD('media/' + media.id + '/image', {}, {}, { 'image': image });
+        };
+
+        this.getUploadPolicyForMedia = function(media, contentType) {
+            if (!media || !media.id) { return Promise.reject('No media provided.'); }
+            if (!contentType) { return Promise.reject('No content type provided.'); }
+            return this.session.GET('media/' + media.id + '/upload-policy', { 'contentType': contentType }).then(function(result) { return result.data; });
+        };
+
+        this.deleteMedia = function(media) {
+            if (!media || !media.id) { return Promise.reject('No media provided.'); }
+            return this.session.DELETE('media/' + media.id);
+        };
 
         this.getSeries = function() {
             return this.session.GET('series').then(parseAPIResponse);

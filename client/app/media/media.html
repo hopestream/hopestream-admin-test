@@ -300,6 +300,46 @@
         </div>
     </section>
 
+
+    <!-- ADVANCED -->
+    <section class="hs-content-section">
+        <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isAdvancedSectionCollapsed = !vm.isAdvancedSectionCollapsed">
+            <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isAdvancedSectionCollapsed"></i>
+            <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isAdvancedSectionCollapsed"></i>
+        </button>
+
+        <h2>Advanced</h2>
+
+        <div class="row" id="media-advanced-section" data-uib-collapse="vm.isAdvancedSectionCollapsed">
+            <div class="col-sm-6 hs-advanced-section-item" data-ng-if="vm.media.status !== 0">
+                <h3>Replace Media</h3>
+
+                <p>Upload a new version of this media.  This will replace the content
+                    but keep the same unique URLs for the video and audio files.</p>
+
+                <p><strong>NOTE:</strong> Uploaded media will need to be processed
+                    before it is available for streaming and download.</p>
+
+                <button class="btn btn-default" data-toggle="modal" data-target="#replace-media-modal">
+                    <i class="fa fa-cloud-upload"></i> &nbsp;Replace Media
+                </button>
+            </div>
+
+            <div class="col-sm-6 hs-advanced-section-item">
+                <h3>Delete Media</h3>
+
+                <p>Permanently delete this media including all video and audio files.</p>
+
+                <p><strong>NOTE:</strong> This will delete the media record and remove it from all feeds.
+                    Video and audio files will be deleted within 24 hours.</p>
+
+                <button class="btn btn-danger-inverse" data-toggle="modal" data-target="#delete-media-modal">
+                    <i class="fa fa-trash"></i> &nbsp;Delete Media
+                </button>
+            </div>
+        </div>
+    </section>
+
     <p><a data-ui-sref="media-list"><i class="fa fa-angle-left"></i> &nbsp;Back to Media List</a></p>
 </div>
 
@@ -309,4 +349,60 @@
         <p class="lead">Please wait one moment.</p>
         <span id="spinner" us-spinner></span>
     </section>
+</div>
+
+
+<!-- Modal for Replace Media -->
+<div id="replace-media-modal" class="modal fade" data-ng-if="vm.media" role="dialog" aria-labelledby="replace-media-modal-label" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="replace-media-modal-label">Replace Media</h4>
+            </div>
+
+            <div class="modal-body">
+                <p>Upload a new version of this media.  This will replace the content
+                    but keep the same unique URLs for the video and audio files.</p>
+
+                <p><strong>NOTE:</strong> Uploaded media will need to be processed
+                    before it is available for streaming and download.</p>
+
+                <hs-media-replace media-id="{{ vm.id }}"></hs-media-replace>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Delete Media -->
+<div id="delete-media-modal" class="modal fade" data-ng-if="vm.media" role="dialog" aria-labelledby="delete-media-modal-label" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="delete-media-modal-label">Delete Media</h4>
+            </div>
+
+            <div class="modal-body">
+                <p>Permanently delete "<strong>{{ vm.media | mediaDisplayName }}</strong>?"</p>
+                <p><strong>NOTE:</strong> This will delete the media record and remove it from all feeds.</p>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">
+                    Cancel
+                </button>
+
+                <button class="btn btn-danger" data-dismiss="modal" data-ng-click="vm.deleteMedia()">
+                    <i class="fa fa-trash"></i>&nbsp; Delete Media
+                </button>
+            </div>
+        </div>
+    </div>
 </div>

@@ -12,9 +12,9 @@
         .module('app.media')
         .controller('Media', Media);
 
-    Media.$inject = ['$rootScope', '$stateParams', '$timeout', 'toastr', 'API', 'State', 'Hash', 'DTOptionsBuilder', 'DTColumnDefBuilder'];
+    Media.$inject = ['$rootScope', '$stateParams', '$state', '$timeout', 'toastr', 'API', 'State', 'Hash', 'DTOptionsBuilder', 'DTColumnDefBuilder'];
 
-    function Media($rootScope, $stateParams, $timeout, toastr, API, State, Hash, DTOptionsBuilder, DTColumnDefBuilder) {
+    function Media($rootScope, $stateParams, $state, $timeout, toastr, API, State, Hash, DTOptionsBuilder, DTColumnDefBuilder) {
         var vm = this;
         var timeout = null;
         vm.state = State;
@@ -85,6 +85,19 @@
             toastr.error('<i class="fa fa-exclamation-triangle fa-lg"></i>&nbsp; Failed to copy to clipboard: ' + error);
         }
 
+        vm.deleteMedia = function() {
+            API.deleteMedia(vm.media)
+                .then(function() {
+                    delete State.mediaByID[vm.id];
+                    $state.go('media-list');
+                }, function(error) {
+                    toastr.options.timeOut = 2000;
+                    toastr.options.extendedTimeOut = 1000;
+                    toastr.options.positionClass = 'toast-bottom-right';
+                    toastr.error('<i class="fa fa-exclamation-triangle fa-lg"></i>&nbsp; Failed to delete media: ' + error);
+                });
+        }
+
         vm.playcountData = [];
         vm.playcountChartOptions = HopeStream.PLAYCOUNT_CHART_OPTIONS;
         vm.bandwidthData = [];
@@ -104,7 +117,8 @@
                     vm.bandwidthData = [
                         { key: 'Bandwidth (GB)', values: [] }];
 
-                    for (var i = 0; i < usage.length; i++) {
+                    var length = usage && usage.length;
+                    for (var i = 0; i < length; i++) {
                         var data = usage[i];
 
                         // Trim the time portion of the date: 2015-09-02T04:00:00.000Z -> 2015-09-02
