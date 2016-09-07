@@ -85,6 +85,21 @@
                         controllerAs: 'vm'
                     }
                 }
+            })
+            .state('upload', {
+                url: '/upload',
+                views: {
+                    'navbar': {
+                        templateUrl: 'app/navbar/navbar.html',
+                        controller: 'Navbar',
+                        controllerAs: 'vm'
+                    },
+                    'content': {
+                        templateUrl: 'app/upload/upload.html',
+                        controller: 'Upload',
+                        controllerAs: 'vm'
+                    }
+                }
             });
     }
 })();

@@ -46,7 +46,7 @@
 
         API.getUploadPolicyForMedia(State.mediaByID[vm.mediaId], vm.file.type)
             .then(function(policy) { return uploadFile(policy); })
-            .then(function() { return API.updateMediaStatus(1); })
+            .then(function() { return API.updateMediaStatus(vm.media, 1); })
             .then(function() { vm.media.status = 1; })
             .then(completeUpload);
 

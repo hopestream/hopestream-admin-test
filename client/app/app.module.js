@@ -6,6 +6,7 @@
         'app.login',
         'app.media',
         'app.navbar',
-        'app.organization'
+        'app.organization',
+        'app.upload'
     ]);
 })();

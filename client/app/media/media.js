@@ -88,6 +88,12 @@
         vm.deleteMedia = function() {
             API.deleteMedia(vm.media)
                 .then(function() {
+                    var index = -1;
+                    for (var i = 0; i < State.media.length; i++) {
+                        if (State.media[i].id == vm.media.id) { index = i; break; }
+                    }
+                    if (index >= 0) { State.media.splice(index, 1); }
+
                     delete State.mediaByID[vm.id];
                     $state.go('media-list');
                 }, function(error) {

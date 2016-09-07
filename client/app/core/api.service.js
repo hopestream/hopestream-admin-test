@@ -25,11 +25,15 @@
             return this.session.GET('media').then(parseAPIResponse);
         };
 
+        this.createMedia = function() {
+            return this.session.POST('media').then(parseAPIResponse);
+        }
+
         this.updateMedia = function(media) {
             if (!media || !media.id) { return Promise.reject('No media provided.'); }
 
             var data = {};
-            copyProperties(media, data, ['name', 'description', 'hidden', 'videoUrl', 'audioUrl', 'streamUrl', 'speakerIds', 'topicIds']);
+            copyProperties(media, data, ['name', 'description', 'hidden', 'speakerIds', 'topicIds']);
             data.date = media.date.getTime();
             data.seriesId = media.seriesId || null;
 
