@@ -56,6 +56,11 @@
             return this.session.GET('media/' + media.id + '/upload-policy', { 'contentType': contentType }).then(function(result) { return result.data; });
         };
 
+        this.getUsageForMedia = function(media) {
+            if (!media || !media.id) { return Promise.reject('No media provided.'); }
+            return this.session.GET('media/' + media.id + '/usage').then(function(result) { return result.data.usage; });
+        };
+
         this.deleteMedia = function(media) {
             if (!media || !media.id) { return Promise.reject('No media provided.'); }
             return this.session.DELETE('media/' + media.id);
@@ -74,13 +79,18 @@
         };
 
         this.updateOrganization = function(organization) {
-            if (!organization) { return Promise.reject('No organization provided.'); }
+            if (!organization || !organization.id) { return Promise.reject('No organization provided.'); }
 
             var data = {};
             copyProperties(organization, data, 'name', 'description', 'url');
 
             return this.session.PUT('organizations/' + organization.id, {}, {}, data);
         };
+
+        this.getUsageForOrganization = function(organization) {
+            if (!organization || !organization.id) { return Promise.reject('No organization provided.'); }
+            return this.session.GET('organizations/' + organization.id + '/usage').then(function(result) { return result.data.usage; });
+        }
 
         this.getTopics = function() {
             return this.session.GET('topics').then(parseAPIResponse);
@@ -108,10 +118,5 @@
             if (!feed || !feed.id) { return Promise.reject('No feed provided.'); }
             return this.session.DELETE('feeds/' + feed.id + '/media', { 'id': id });
         };
-
-        this.getUsageForMedia = function(media) {
-            if (!media || !media.id) { return Promise.reject('No media provided.'); }
-            return this.session.GET('usage', { mediaId: media.id }).then(function(result) { return result.data.usage; });
-        }
     }
 })();

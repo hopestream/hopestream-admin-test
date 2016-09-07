@@ -1,6 +1,8 @@
 <div class="container" data-ng-if="vm.state.organization">
     <h1>{{vm.state.organization.name}}</h1>
 
+
+    <!-- DETAILS -->
     <section class="hs-content-section">
         <h2>Details</h2>
 
@@ -39,6 +41,133 @@
                 </div>
             </form>
         </section>
+    </section>
+
+
+    <!-- PLAY COUNTS -->
+    <section class="hs-content-section">
+        <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isPlaysSectionCollapsed = !vm.isPlaysSectionCollapsed">
+            <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isPlaysSectionCollapsed"></i>
+            <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isPlaysSectionCollapsed"></i>
+        </button>
+
+        <h2>Plays</h2>
+
+        <div data-uib-collapse="vm.isPlaysSectionCollapsed">
+            <nvd3 options="vm.playcountChartOptions" data="vm.playcountData"></nvd3>
+            <div class="hs-chart-instructions">
+                <h3>Instructions</h3>
+                <ul>
+                    <li>Hover over the chart to view audio, video, and HLS play counts for each date.</li>
+                    <li>In the top-right corner, click the legend items to toggle lines on/off.</li>
+                    <li>Click and drag in the timeline (smaller bottom graph) to adjust what is shown in the main graph.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- BANDWIDTH -->
+    <section class="hs-content-section">
+        <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isBandwidthSectionCollapsed = !vm.isBandwidthSectionCollapsed">
+            <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isBandwidthSectionCollapsed"></i>
+            <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isBandwidthSectionCollapsed"></i>
+        </button>
+
+        <h2>Bandwidth</h2>
+
+        <div data-uib-collapse="vm.isBandwidthSectionCollapsed">
+            <nvd3 options="vm.bandwidthChartOptions" data="vm.bandwidthData"></nvd3>
+            <div class="hs-chart-instructions">
+                <h3>Instructions</h3>
+                <ul>
+                    <li>Hover over the chart to view bandwidth (gigabytes) for each date.</li>
+                    <li>Click and drag in the timeline (smaller bottom graph) to adjust what is shown in the main graph.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- USAGE DATA -->
+    <section class="hs-content-section">
+        <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isUsageSectionCollapsed = !vm.isUsageSectionCollapsed">
+            <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isUsageSectionCollapsed"></i>
+            <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isUsageSectionCollapsed"></i>
+        </button>
+
+        <h2>Usage Data</h2>
+
+        <div id="media-usage-section" data-uib-collapse="vm.isUsageSectionCollapsed">
+            <div class="row" data-ng-if="vm.isUsageLoading">
+                <div class="col-sm-12"><p class="hs-form-loading-view">Loading Usage...</p></div>
+            </div>
+
+            <div class="row" data-ng-if="!vm.isUsageLoading">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-12"><h3>Totals</h3></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-3 hs-media-usage-total-item">
+                            Bandwidth <span>{{ vm.usageTotals.bandwidth | fileSize }}</span>
+                        </div>
+                        <div class="col-sm-3 hs-media-usage-total-item">
+                            Audio Plays <span>{{ vm.usageTotals.playcountAudio | number }}</span>
+                        </div>
+                        <div class="col-sm-3 hs-media-usage-total-item">
+                            Video Plays <span>{{ vm.usageTotals.playcountVideo | number }}</span>
+                        </div>
+                        <div class="col-sm-3 hs-media-usage-total-item">
+                            HLS Plays <span>{{ vm.usageTotals.playcountHLS | number }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="table-responsive hs-table col-sm-12">
+                    <table id="usage-list" class="display table table-bordered table-striped" data-datatable="ng" data-dt-options="vm.dtOptions" data-dt-column-defs="vm.dtColumnDefs" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>UTC Timestamp</th>
+                                <th>Bandwidth</th>
+                                <th>Bandwidth Bytes</th>
+                                <th>Audio Plays</th>
+                                <th>Video Plays</th>
+                                <th>HLS Plays</th>
+                            </tr>
+                        </thead>
+
+                        <tfoot>
+                            <tr>
+                                <th>Date</th>
+                                <th>UTC Timestamp</th>
+                                <th>Bandwidth</th>
+                                <th>Bandwidth Bytes</th>
+                                <th>Audio Plays</th>
+                                <th>Video Plays</th>
+                                <th>HLS Plays</th>
+                            </tr>
+                        </tfoot>
+
+                        <tbody>
+                            <tr data-ng-repeat="usage in vm.usageData">
+                                <td>{{ usage.date | date : 'MMM&nbsp;d,&nbsp;yyyy - EEEE' : '-0000' }}</td>
+                                <td>{{ usage.date }}</td>
+                                <td>{{ usage[1] | fileSize }}</td>
+                                <td>{{ usage[1] }}</td>
+                                <td>{{ usage[2] | number }}</td>
+                                <td>{{ usage[3] | number }}</td>
+                                <td>{{ usage[4] | number }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </section>
 </div>
 

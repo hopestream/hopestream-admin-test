@@ -5,7 +5,6 @@
     var STATIC_HOPESTREAM_PLAYER_URL = 'https://static.hopestream.com/player.html?id=';
     var HOPESTREAM_MEDIA_URL_TEST = 'https://hopestream-test.s3.amazonaws.com/media/'; // TEST URL
     var HOPESTREAM_MEDIA_URL_PROD = 'https://hopestream.s3.amazonaws.com/media/'; // PRODUCTION URL
-    var MARKED_FOR_DELETION_STATUS = 5;
     var BYTES_PER_GIGABYTE = Math.pow(1024, 3);
 
     angular
