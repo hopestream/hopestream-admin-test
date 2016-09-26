@@ -100,6 +100,21 @@
                         controllerAs: 'vm'
                     }
                 }
+            })
+            .state('feed-list', {
+                url: '/feeds',
+                views: {
+                    'navbar': {
+                        templateUrl: 'app/navbar/navbar.html',
+                        controller: 'Navbar',
+                        controllerAs: 'vm'
+                    },
+                    'content': {
+                        templateUrl: 'app/feeds/feed-list.html',
+                        controller: 'FeedList',
+                        controllerAs: 'vm'
+                    }
+                }
             });
     }
 })();
