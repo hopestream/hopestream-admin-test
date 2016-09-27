@@ -115,6 +115,21 @@
                         controllerAs: 'vm'
                     }
                 }
+            })
+            .state('feed', {
+                url: '/feeds/:id',
+                views: {
+                    'navbar': {
+                        templateUrl: 'app/navbar/navbar.html',
+                        controller: 'Navbar',
+                        controllerAs: 'vm'
+                    },
+                    'content': {
+                        templateUrl: 'app/feeds/feed.html',
+                        controller: 'Feed',
+                        controllerAs: 'vm'
+                    }
+                }
             });
     }
 })();

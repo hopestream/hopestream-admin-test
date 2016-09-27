@@ -16,13 +16,25 @@
     <div class="hs-expand-collapse-all-buttons">
         <button class="btn btn-default" data-ng-click="
             vm.isDetailsSectionCollapsed   = false;
-        ">
+            vm.isImageSectionCollapsed     = false;
+            vm.isVideoSectionCollapsed     = false;
+            vm.isAudioSectionCollapsed     = false;
+            vm.isPlaysSectionCollapsed     = false;
+            vm.isBandwidthSectionCollapsed = false;
+            vm.isUsageSectionCollapsed     = false;
+            vm.isAdvancedSectionCollapsed  = false;">
             <i class="fa fa-2x fa-angle-down"></i>
         </button>
 
         <button class="btn btn-default" data-ng-click="
             vm.isDetailsSectionCollapsed   = true;
-        ">
+            vm.isImageSectionCollapsed     = true;
+            vm.isVideoSectionCollapsed     = true;
+            vm.isAudioSectionCollapsed     = true;
+            vm.isPlaysSectionCollapsed     = true;
+            vm.isBandwidthSectionCollapsed = true;
+            vm.isUsageSectionCollapsed     = true;
+            vm.isAdvancedSectionCollapsed  = true;">
             <i class="fa fa-2x fa-angle-up"></i>
         </button>
     </div>
