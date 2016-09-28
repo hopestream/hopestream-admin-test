@@ -9,6 +9,7 @@
         'app.navbar',
         'app.organization',
         'app.series',
+        'app.speakers',
         'app.upload'
     ]);
 })();

@@ -11,7 +11,8 @@
             scope: {
                 feedId: '@',
                 mediaId: '@',
-                seriesId: '@'
+                seriesId: '@',
+                speakerId: '@'
             },
             templateUrl: 'app/core/image-upload.directive.html',
             controller: ImageUploadController,
@@ -67,6 +68,8 @@
                 vm.upload = API.uploadImageForFeed(State.feedsByID[$scope.feedId], vm.file);
             } else if ($scope.seriesId) {
                 vm.upload = API.uploadImageForSeries(State.seriesByID[$scope.seriesId], vm.file);
+            } else if ($scope.speakerId) {
+                vm.upload = API.uploadImageForSpeaker(State.speakersByID[$scope.speakerId], vm.file);
             }
 
             vm.upload.then(function(response) {

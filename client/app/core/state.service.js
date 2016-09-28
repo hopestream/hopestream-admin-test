@@ -5,6 +5,7 @@
         'home': 'organization', 'organization': 'organization',
         'media-list': 'media', 'media': 'media', 'upload': 'media',
         'series-list': 'series', 'series': 'series',
+        'speaker-list': 'speakers', 'speaker': 'speakers',
         'feed-list': 'feeds', 'feed': 'feeds'
     };
 

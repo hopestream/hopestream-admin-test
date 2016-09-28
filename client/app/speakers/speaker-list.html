@@ -1,0 +1,49 @@
+<div class="container" data-ng-if="vm.state.speakers">
+    <button class="btn btn-primary pull-right hs-add-button" data-ng-click="vm.addSpeaker()">Add Speaker</button>
+
+    <h1>Speakers</h1>
+
+    <div class="table-responsive hs-table">
+        <table id="speaker-list" class="display table table-bordered table-striped"
+            data-datatable="ng"
+            data-dt-options="vm.dtOptions"
+            data-dt-column-defs="vm.dtColumnDefs"
+            cellspacing="0"
+            width="100%">
+
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                </tr>
+            </thead>
+
+            <tfoot>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                </tr>
+            </tfoot>
+
+            <tbody>
+                <tr data-ng-repeat="speaker in vm.state.speakers">
+                    <td>
+                        <img data-ng-src="{{speaker.thumbnailUrl}}" style="height:68px;width:120px;background-color:#EDEDED;margin-left:16px;margin-right:8px;"></img>
+                    </td>
+
+                    <td>
+                        <a data-ui-sref="speaker({ id: speaker.id })">{{ speaker.name ? speaker.name : "Untitled" }}</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="container" data-ng-if="!vm.state.speakers">
+    <section class="hs-loading-view">
+        <h1>Loading Speakers</h1>
+        <p class="lead">Please wait one moment.</p>
+        <span id="spinner" us-spinner></span>
+    </section>
+</div>

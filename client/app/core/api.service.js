@@ -97,6 +97,29 @@
             return this.session.GET('speakers/all').then(parseAPIResponse);
         };
 
+        this.createSpeaker = function() {
+            return this.session.POST('speakers').then(parseAPIResponse);
+        }
+
+        this.updateSpeaker = function(speaker) {
+            if (!speaker || !speaker.id) { return Promise.reject('No speaker provided.'); }
+
+            var data = {};
+            copyProperties(speaker, data, ['name', 'description']);
+
+            return this.session.PUT('speakers/' + speaker.id, {}, {}, data);
+        };
+
+        this.uploadImageForSpeaker = function(speaker, image) {
+            if (!speaker || !speaker.id) { return Promise.reject('No speaker provided.'); }
+            return this.session.UPLOAD('speakers/' + speaker.id + '/image', {}, {}, { 'image': image });
+        };
+
+        this.deleteSpeaker = function(speaker) {
+            if (!speaker || !speaker.id) { return Promise.reject('No speaker provided.'); }
+            return this.session.DELETE('speakers/' + speaker.id);
+        };
+
         this.getOrganizations = function() {
             return this.session.GET('organizations').then(parseAPIResponse);
         };

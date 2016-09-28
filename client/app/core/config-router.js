@@ -131,6 +131,36 @@
                     }
                 }
             })
+            .state('speaker-list', {
+                url: '/speakers',
+                views: {
+                    'navbar': {
+                        templateUrl: 'app/navbar/navbar.html',
+                        controller: 'Navbar',
+                        controllerAs: 'vm'
+                    },
+                    'content': {
+                        templateUrl: 'app/speakers/speaker-list.html',
+                        controller: 'SpeakerList',
+                        controllerAs: 'vm'
+                    }
+                }
+            })
+            .state('speaker', {
+                url: '/speakers/:id',
+                views: {
+                    'navbar': {
+                        templateUrl: 'app/navbar/navbar.html',
+                        controller: 'Navbar',
+                        controllerAs: 'vm'
+                    },
+                    'content': {
+                        templateUrl: 'app/speakers/speaker.html',
+                        controller: 'Speaker',
+                        controllerAs: 'vm'
+                    }
+                }
+            })
             .state('feed-list', {
                 url: '/feeds',
                 views: {
