@@ -69,11 +69,11 @@
                 <p>Upload an image for this media.</p>
                 <p>Image must be in <strong>.jpg</strong> format.</p>
 
-                <hs-media-image-upload media-id="{{ vm.id }}"></hs-media-image-upload>
+                <hs-image-upload media-id="{{ vm.id }}"></hs-image-upload>
             </div>
 
-            <div class="col-sm-8 hs-media-image-section-preview" data-ng-if="vm.shouldShowMediaImage">
-                <img class="img-responsive" alt="Poster Image" data-ng-src="{{ vm.imageFileUrl }}" data-hs-media-image>
+            <div class="col-sm-8 hs-media-image-section-preview" data-ng-if="vm.shouldShowImage">
+                <img class="img-responsive" alt="Poster Image" data-ng-src="{{ vm.imageUrl }}" data-hs-media-image>
             </div>
         </div>
     </section>

@@ -3,23 +3,24 @@
 
     angular
         .module('app.core')
-        .directive('hsMediaImageUpload', mediaImageUploadDirective);
+        .directive('hsImageUpload', imageUploadDirective);
 
-    function mediaImageUploadDirective() {
+    function imageUploadDirective() {
         return {
             restrict: 'E',
             scope: {
+                feedId: '@',
                 mediaId: '@'
             },
-            templateUrl: 'app/media/media-image-upload.directive.html',
-            controller: MediaImageUploadController,
+            templateUrl: 'app/core/image-upload.directive.html',
+            controller: ImageUploadController,
             controllerAs: 'vm'
         };
     }
 
-    MediaImageUploadController.$inject = ['$rootScope', '$scope', '$q', 'API', 'State'];
+    ImageUploadController.$inject = ['$rootScope', '$scope', '$q', 'API', 'State'];
 
-    function MediaImageUploadController($rootScope, $scope, $q, API, State) {
+    function ImageUploadController($rootScope, $scope, $q, API, State) {
         var vm = this;
 
         vm.UPLOAD_STATUS_WAITING   = 0;
@@ -59,12 +60,17 @@
             manager.addUpload('A', new UploadProgress.Upload(new Date().getTime(), vm.loaded, vm.file.size));
 
             // Begin the file upload
-            vm.upload = API.uploadImageForMedia(State.mediaByID[$scope.mediaId], vm.file);
+            if ($scope.mediaId) {
+                vm.upload = API.uploadImageForMedia(State.mediaByID[$scope.mediaId], vm.file);
+            } else if ($scope.feedId) {
+                vm.upload = API.uploadImageForFeed(State.feedsByID[$scope.feedId], vm.file);
+            }
+
             vm.upload.then(function(response) {
                 vm.status = vm.UPLOAD_STATUS_COMPLETE;
 
                 deferred.resolve();
-                $rootScope.$broadcast('mediaImageUploadCompleted', { hash: vm.hash });
+                $rootScope.$broadcast('imageUploadCompleted', { hash: vm.hash });
             }, function(error) {
                 if (error && error.status === -1) { // User cancelled the upload
                     vm.status = vm.UPLOAD_STATUS_WAITING;

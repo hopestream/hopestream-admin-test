@@ -5,13 +5,14 @@
         .module('app.feeds')
         .controller('Feed', Feed);
 
-    Feed.$inject = ['$rootScope', '$stateParams', '$state', 'API', 'State', 'DTOptionsBuilder', 'DTColumnDefBuilder'];
+    Feed.$inject = ['$rootScope', '$stateParams', '$state', '$timeout', 'toastr', 'API', 'State', 'Hash', 'DTOptionsBuilder', 'DTColumnDefBuilder'];
 
-    function Feed($rootScope, $stateParams, $state, API, State, DTOptionsBuilder, DTColumnDefBuilder) {
+    function Feed($rootScope, $stateParams, $state, $timeout, toastr, API, State, Hash, DTOptionsBuilder, DTColumnDefBuilder) {
         var vm = this;
         var timeout = null;
         vm.state = State;
         vm.id = $stateParams.id;
+        vm.hash = Hash.encode(parseInt($stateParams.id, 10));
         vm.feed = undefined;
         vm.dtOptions = DTOptionsBuilder.newOptions()
             .withBootstrap()
@@ -30,13 +31,23 @@
             DTColumnDefBuilder.newColumnDef(3).withOption('width', '30%'),
             DTColumnDefBuilder.newColumnDef(4).withOption('width', '20%')
         ];
-        vm.deleteFeed = deleteFeed;
+
+        vm.imageUrl = HopeStream.S3_URL + 'feed/' + vm.hash + '/thumbnail.jpg?' + new Date().getTime();
+        vm.shouldShowImage = true;
+
+        $rootScope.$on('imageUploadCompleted', function(event, args) {
+            // reload the image by adding a random query string parameter
+            vm.imageUrl = vm.imageUrl.split('?')[0] + '?' + new Date().getTime();
+
+            vm.shouldShowImage = false;
+            $timeout(function() { vm.shouldShowImage = true; }, 0);
+        });
 
         $rootScope.$watch(function() { return State.feedsByID && State.feedsByID[vm.id]; }, function() {
             vm.feed = State.feedsByID && State.feedsByID[vm.id];
         });
 
-        function deleteFeed() {
+        vm.deleteFeed = function() {
             API.deleteFeed(vm.feed)
                 .then(function() {
                     var index = -1;
@@ -53,6 +64,6 @@
                     toastr.options.positionClass = 'toast-bottom-right';
                     toastr.error('<i class="fa fa-exclamation-triangle fa-lg"></i>&nbsp; Failed to delete feed: ' + error);
                 });
-        }
+        };
     }
 })();

@@ -1,8 +1,6 @@
 (function() {
     'use strict';
 
-    var BYTES_PER_GIGABYTE = Math.pow(1024, 3);
-
     angular
         .module('app.organization')
         .controller('Organization', Organization);
@@ -67,7 +65,7 @@
                         vm.playcountData[0].values.push([ date, data[2] ]);
                         vm.playcountData[1].values.push([ date, data[3] ]);
                         vm.playcountData[2].values.push([ date, data[4] ]);
-                        vm.bandwidthData[0].values.push([ date, data[1] / BYTES_PER_GIGABYTE ]);
+                        vm.bandwidthData[0].values.push([ date, data[1] / HopeStream.BYTES_PER_GIGABYTE ]);
 
                         vm.usageTotals.bandwidth      += data[1];
                         vm.usageTotals.playcountAudio += data[2];

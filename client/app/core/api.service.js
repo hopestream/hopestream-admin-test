@@ -122,6 +122,11 @@
             return this.session.DELETE('feeds/' + feed.id);
         };
 
+        this.uploadImageForFeed = function(feed, image) {
+            if (!feed || !feed.id) { return Promise.reject('No feed provided.'); }
+            return this.session.UPLOAD('feeds/' + feed.id + '/image', {}, {}, { 'image': image });
+        };
+
         this.getMediaIDsForFeed = function(feed) {
             if (!feed || !feed.id) { return Promise.reject('No feed provided.'); }
             return this.session.GET('feeds/' + feed.id + '/media').then(function(result) { return result.data; });

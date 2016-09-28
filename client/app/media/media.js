@@ -1,12 +1,6 @@
 (function() {
     'use strict';
 
-    var STATIC_HOPESTREAM_MEDIA_URL = 'https://static.hopestream.com/media/';
-    var STATIC_HOPESTREAM_PLAYER_URL = 'https://static.hopestream.com/player.html?id=';
-    var HOPESTREAM_MEDIA_URL_TEST = 'https://hopestream-test.s3.amazonaws.com/media/'; // TEST URL
-    var HOPESTREAM_MEDIA_URL_PROD = 'https://hopestream.s3.amazonaws.com/media/'; // PRODUCTION URL
-    var BYTES_PER_GIGABYTE = Math.pow(1024, 3);
-
     angular
         .module('app.media')
         .controller('Media', Media);
@@ -21,15 +15,15 @@
         vm.hash = Hash.encode(parseInt($stateParams.id, 10));
         vm.media = undefined;
 
-        vm.imageFileUrl = HOPESTREAM_MEDIA_URL_TEST + vm.hash + '/image.jpg?' + new Date().getTime();
-        vm.shouldShowMediaImage = true;
+        vm.imageUrl = HopeStream.S3_URL + 'media/' + vm.hash + '/image.jpg?' + new Date().getTime();
+        vm.shouldShowImage = true;
 
-        $rootScope.$on('mediaImageUploadCompleted', function(event, args) {
+        $rootScope.$on('imageUploadCompleted', function(event, args) {
             // reload the image by adding a random query string parameter
-            vm.imageFileUrl = vm.imageFileUrl.split('?')[0] + '?' + new Date().getTime();
+            vm.imageUrl = vm.imageUrl.split('?')[0] + '?' + new Date().getTime();
 
-            vm.shouldShowMediaImage = false;
-            $timeout(function() { vm.shouldShowMediaImage = true; }, 0);
+            vm.shouldShowImage = false;
+            $timeout(function() { vm.shouldShowImage = true; }, 0);
         });
 
         $rootScope.$watch(function() { return State.mediaByID && State.mediaByID[vm.id]; }, function() {
@@ -44,12 +38,12 @@
         });
 
         var updateVideoURLs = function() {
-            vm.videoPlayerUrl = STATIC_HOPESTREAM_PLAYER_URL + vm.hash;
+            vm.videoPlayerUrl = HopeStream.PLAYER_URL + vm.hash;
             vm.videoURLs = [
                 { label: 'Video ID', url: vm.hash },
-                { label: 'Video Player', url: STATIC_HOPESTREAM_PLAYER_URL + vm.hash },
-                { label: 'Video Stream', url: STATIC_HOPESTREAM_MEDIA_URL + vm.hash + '/master.m3u8' },
-                { label: 'Video File', url: STATIC_HOPESTREAM_MEDIA_URL + vm.hash + '/video-default.mp4' }
+                { label: 'Video Player', url: HopeStream.PLAYER_URL + vm.hash },
+                { label: 'Video Stream', url: HopeStream.STATIC_URL + 'media/' + vm.hash + '/master.m3u8' },
+                { label: 'Video File', url: HopeStream.STATIC_URL + 'media/' + vm.hash + '/video-default.mp4' }
             ];
         };
 
@@ -57,14 +51,14 @@
             vm.audioURLs = [];
             if (vm.media.type && vm.media.type == 1) {
                 vm.audioURLs.push({ label: 'Audio ID', url: vm.hash });
-                vm.audioURLs.push({ label: 'Audio Stream (Recommended)', url: STATIC_HOPESTREAM_MEDIA_URL + vm.hash + '/master.m3u8' });
+                vm.audioURLs.push({ label: 'Audio Stream (Recommended)', url: HopeStream.STATIC_URL + 'media/' + vm.hash + '/master.m3u8' });
             }
-            vm.audioURLs.push({ label: 'Audio File', url: STATIC_HOPESTREAM_MEDIA_URL + vm.hash + '/audio.mp3' });
+            vm.audioURLs.push({ label: 'Audio File', url: HopeStream.STATIC_URL + 'media/' + vm.hash + '/audio.mp3' });
 
             vm.audioPlayerOptions = {
                 file: (vm.media.type == 1) ?
-                    STATIC_HOPESTREAM_MEDIA_URL + vm.hash + '/master.m3u8' :
-                    STATIC_HOPESTREAM_MEDIA_URL + vm.hash + '/audio.mp3',
+                    HopeStream.STATIC_URL + 'media/' + vm.hash + '/master.m3u8' :
+                    HopeStream.STATIC_URL + 'media/' + vm.hash + '/audio.mp3',
                 aspectratio: "0",
                 height: "33"
             }
@@ -134,7 +128,7 @@
                         vm.playcountData[0].values.push([ date, data[2] ]);
                         vm.playcountData[1].values.push([ date, data[3] ]);
                         vm.playcountData[2].values.push([ date, data[4] ]);
-                        vm.bandwidthData[0].values.push([ date, data[1] / BYTES_PER_GIGABYTE ]);
+                        vm.bandwidthData[0].values.push([ date, data[1] / HopeStream.BYTES_PER_GIGABYTE ]);
 
                         vm.usageTotals.bandwidth      += data[1];
                         vm.usageTotals.playcountAudio += data[2];
