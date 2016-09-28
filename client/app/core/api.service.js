@@ -133,6 +133,11 @@
             return this.session.PUT('organizations/' + organization.id, {}, {}, data);
         };
 
+        this.uploadImageForOrganization = function(organization, image) {
+            if (!organization || !organization.id) { return Promise.reject('No organization provided.'); }
+            return this.session.UPLOAD('organizations/' + organization.id + '/image', {}, {}, { 'image': image });
+        };
+
         this.getUsageForOrganization = function(organization) {
             if (!organization || !organization.id) { return Promise.reject('No organization provided.'); }
             return this.session.GET('organizations/' + organization.id + '/usage').then(function(result) { return result.data.usage; });

@@ -5,9 +5,9 @@
         .module('app.organization')
         .controller('Organization', Organization);
 
-    Organization.$inject = ['$scope', 'API', 'State', 'DTOptionsBuilder', 'DTColumnDefBuilder'];
+    Organization.$inject = ['$rootScope', '$scope', '$timeout', 'API', 'State', 'Hash', 'DTOptionsBuilder', 'DTColumnDefBuilder'];
 
-    function Organization($scope, API, State, DTOptionsBuilder, DTColumnDefBuilder) {
+    function Organization($rootScope, $scope, $timeout, API, State, Hash, DTOptionsBuilder, DTColumnDefBuilder) {
         var vm = this;
         vm.state = State;
         vm.organization = angular.copy(State.organization);
@@ -31,7 +31,19 @@
 
             if (vm.organization && !previous) {
                 updateUsageStatistics();
+
+                vm.hash = Hash.encode(parseInt(State.organization.id, 10));
+                vm.imageUrl = HopeStream.S3_URL + 'organization/' + vm.hash + '/image.jpg?' + new Date().getTime();
+                vm.shouldShowImage = true;
             }
+        });
+
+        $rootScope.$on('imageUploadCompleted', function(event, args) {
+            // reload the image by adding a random query string parameter
+            vm.imageUrl = vm.imageUrl.split('?')[0] + '?' + new Date().getTime();
+
+            vm.shouldShowImage = false;
+            $timeout(function() { vm.shouldShowImage = true; }, 0);
         });
 
         vm.playcountData = [];

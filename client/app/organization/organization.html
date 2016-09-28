@@ -43,6 +43,28 @@
         </section>
     </section>
 
+    <!-- IMAGE -->
+    <section class="hs-content-section">
+        <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isImageSectionCollapsed = !vm.isImageSectionCollapsed">
+            <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isImageSectionCollapsed"></i>
+            <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isImageSectionCollapsed"></i>
+        </button>
+
+        <h2>Image</h2>
+
+        <div class="row" data-uib-collapse="vm.isImageSectionCollapsed">
+            <div class="col-sm-4 hs-media-image-section-instructions">
+                <p>Upload an image for this organization.</p>
+                <p>Image must be in <strong>.jpg</strong> format.</p>
+
+                <hs-image-upload organization-id="{{ vm.organization.id }}"></hs-image-upload>
+            </div>
+
+            <div class="col-sm-8 hs-media-image-section-preview" data-ng-if="vm.shouldShowImage">
+                <img class="img-responsive" alt="Poster Image" data-ng-src="{{ vm.imageUrl }}" data-hs-media-image>
+            </div>
+        </div>
+    </section>
 
     <!-- PLAY COUNTS -->
     <section class="hs-content-section">

@@ -11,6 +11,7 @@
             scope: {
                 feedId: '@',
                 mediaId: '@',
+                organizationId: '@',
                 seriesId: '@',
                 speakerId: '@'
             },
@@ -62,10 +63,12 @@
             manager.addUpload('A', new UploadProgress.Upload(new Date().getTime(), vm.loaded, vm.file.size));
 
             // Begin the file upload
-            if ($scope.mediaId) {
-                vm.upload = API.uploadImageForMedia(State.mediaByID[$scope.mediaId], vm.file);
-            } else if ($scope.feedId) {
+            if ($scope.feedId) {
                 vm.upload = API.uploadImageForFeed(State.feedsByID[$scope.feedId], vm.file);
+            } else if ($scope.mediaId) {
+                vm.upload = API.uploadImageForMedia(State.mediaByID[$scope.mediaId], vm.file);
+            } else if ($scope.organizationId) {
+                vm.upload = API.uploadImageForOrganization(State.organization, vm.file);
             } else if ($scope.seriesId) {
                 vm.upload = API.uploadImageForSeries(State.seriesByID[$scope.seriesId], vm.file);
             } else if ($scope.speakerId) {
