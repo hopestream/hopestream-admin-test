@@ -9,7 +9,7 @@
         return {
             restrict: 'E',
             scope: {
-                hash: '@'
+                feedId: '@'
             },
             templateUrl: 'app/feeds/feed-form.directive.html',
             controller: FeedFormController,
@@ -17,114 +17,55 @@
         };
     }
 
-    FeedFormController.$inject = ['$rootScope', '$scope', '$timeout', 'Feed', 'hashService'];
+    FeedFormController.$inject = ['$scope', '$timeout', 'API', 'State'];
 
-    function FeedFormController($rootScope, $scope, $timeout, Feed, hashService) {
+    function FeedFormController($scope, $timeout, API, State) {
         var vm = this;
-        var timeout = null;
-        vm.feed = {};
-        vm.isSavingChanges = false;
-        vm.isLoading = false;
+        vm.state = State;
+        vm.saving = false;
+        vm.dirty = false;
+        vm.feed = angular.copy(State.feedsByID[$scope.feedId]);
+
         vm.feedTypes = [
-            {id: '0', name: 'Video Feed'},
-            {id: '1', name: 'Audio Feed'}
+            {id: 0, name: 'Video Feed'},
+            {id: 1, name: 'Audio Feed'}
         ];
-        vm.selectedFeedType;
 
-        initialize();
+        vm.save = function() {
+            if (vm.saving) { return; }
+            vm.saving = true;
+            vm.dirty = false;
 
-        function initialize() {
-            vm.isLoading = true;
-
-            var id = hashService.decode($scope.hash); // FIXME: Remove this when we start using hashes
-
-            Feed.findById({
-                id: id
-            }, function(feed) {
-                vm.feed = feed;
-                vm.selectedFeedType = vm.feedTypes[parseInt(vm.feed.type)];
-                $scope.$watch('vm.feed.title', debounceSaveChanges);
-                $scope.$watch('vm.selectedFeedType', debounceSaveChanges);
-                $scope.$watch('vm.feed.subtitle', debounceSaveChanges);
-                $scope.$watch('vm.feed.description', debounceSaveChanges);
-                $scope.$watch('vm.feed.url', debounceSaveChanges);
-                $scope.$watch('vm.feed.email', debounceSaveChanges);
-                $scope.$watch('vm.feed.copyright', debounceSaveChanges);
-                $scope.$watch('vm.feed.category', debounceSaveChanges);
-                $scope.$watch('vm.feed.keywords', debounceSaveChanges);
-                vm.isLoading = false;
-            }, function(error) {
-                console.log(error);
+            API.updateFeed(vm.feed).then(function() {
+                angular.copy(vm.feed, State.feedsByID[vm.feed.id]);
+                completeSave(false);
+            }, function() {
+                completeSave(true);
             });
-        }
+        };
 
-        function debounceSaveChanges(newValue, oldValue) {
-            if (newValue != oldValue) {
-                if (timeout) { $timeout.cancel(timeout); }
-                timeout = $timeout(saveChanges, 2000);
-            }
-        }
+        function completeSave(error) {
+            if (error) { vm.dirty = true; }
 
-        function saveChanges() {
-            var NOW = new Date();
-
-            vm.isSavingChanges = true;
-            vm.feed.type = vm.selectedFeedType.id;
-            vm.feed.lastUpdated = NOW;
-            vm.feed.$save(function(feed) {
-                $rootScope.$broadcast('feedDetailsChanged', vm.feed);
-                vm.isSavingChanges = false;
-            }, function(error) {
-                console.log(error);
-                vm.isSavingChanges = false;
-            });
-        }
-
-        function deleteFeed() {
-
-            // FIXME: 500ms timeout is a hack.
-            // FIXME: Figure out why modal isn't fully dismissing.
             $timeout(function() {
+                vm.saving = false;
+                if (vm.dirty) { vm.save(); }
+            }, error ? 2000 : 500);
+        }
 
-                Feed.deleteById({
-                    id: vm.feed.id
-                }, function(response) {
-                    // Feed deleted successfully
-
-                    // Delete all feedMedia relationships for this feed
-                    // FIXME: Use promises to do this in the correct sequence
-
-                    FeedMedia.find({
-                        filter: {
-                            where: {
-                                feedId: vm.feed.id
-                            }
-                        }
-                    }, function(feedMedias) {
-
-                        for (var i = 0; i < feedMedias.length; i++) {
-                            var feedMedia = feedMedias[i];
-
-                            FeedMedia.deleteById({
-                                id: feedMedia.id
-                            }, function(response) {
-                                // No operation
-                            }, function(error) {
-                                console.log(error);
-                            });
-                        }
-
-                    }, function(error) {
-                        console.log(error);
-                    });
-
-                }, function(error) {
-                    console.log(error);
-                });
-
-                $state.go('feeds');
-
-            }, 500);
+        var initializing = true;
+        $scope.$watch('vm.feed.title', formDidUpdate);
+        $scope.$watch('vm.feed.type', formDidUpdate);
+        $scope.$watch('vm.feed.subtitle', formDidUpdate);
+        $scope.$watch('vm.feed.description', formDidUpdate);
+        $scope.$watch('vm.feed.url', formDidUpdate);
+        $scope.$watch('vm.feed.email', formDidUpdate);
+        $scope.$watch('vm.feed.copyright', formDidUpdate);
+        $scope.$watch('vm.feed.category', formDidUpdate);
+        $scope.$watch('vm.feed.keywords', formDidUpdate);
+        function formDidUpdate() {
+            if (initializing) { $timeout(function() { initializing = false; }, 0); return; }
+            vm.dirty = true;
         }
     }
 })();

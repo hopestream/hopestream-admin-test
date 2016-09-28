@@ -1,269 +1,165 @@
-<section class="hs-form" id="feed-details-section-{{ hash }}">
-
-    <p class="hs-form-saving-text" data-ng-if="!vm.isLoading">
-
-        {{ vm.isSavingChanges ? "Saving Changes..." : "All Changes Saved." }}
-
-    </p>
-
-    <form name="formFeedDetails" novalidate data-ng-if="!vm.isLoading">
-
+<section id="feed-details-section-{{ feedId }}" class="hs-form">
+    <form name="form" data-ng-if="vm.feed" novalidate>
         <div class="row">
-
             <div class="col-sm-6">
+                <div class="form-group" data-ng-class="{ 'has-error' : form.title.$invalid && form.title.$touched }">
+                    <label for="title">Title</label>
 
-                <div class="form-group" data-ng-class="{ 'has-error' : formFeedDetails.inputTitle.$invalid && formFeedDetails.inputTitle.$touched }">
+                    <input type="text" id="title" class="form-control" name="title" placeholder="Enter a title"
+                        data-ng-model="vm.feed.title"
+                        data-ng-trim="true"
+                        data-ng-maxlength="512"
+                        required></input>
 
-                    <label for="input-title">Title</label>
-
-                    <input class="form-control"
-                           id="input-title"
-                           name="inputTitle"
-                           data-ng-model="vm.feed.title"
-                           data-ng-trim="true"
-                           data-ng-maxlength="512"
-                           type="text"
-                           placeholder="Enter a title"
-                           required>
-
-                    <p class="help-block" data-ng-show="formFeedDetails.inputTitle.$invalid && formFeedDetails.inputTitle.$touched">
-
+                    <p class="help-block" data-ng-show="form.title.$invalid && form.title.$touched">
                         Please enter a title.
-
                     </p>
-
                 </div>
-
             </div>
 
             <div class="col-sm-6">
-
                 <div class="form-group">
+                    <label for="type">Type</label>
 
-                    <label for="input-type">Type</label>
-
-                    <select class="form-control"
-                            id="input-type"
-                            name="inputType"
-                            data-ng-options="feedType.name for feedType in vm.feedTypes track by feedType.id"
-                            data-ng-model="vm.selectedFeedType"></select>
-
+                    <select id="type" class="form-control" name="type"
+                        data-ng-options="feedType.id as feedType.name for feedType in vm.feedTypes"
+                        data-ng-model="vm.feed.type"></select>
                 </div>
-
             </div>
-
         </div>
 
         <div class="row">
-
             <div class="col-sm-6">
+                <div class="form-group" data-ng-class="{ 'has-error' : form.subtitle.$invalid && form.subtitle.$touched }">
+                    <label for="subtitle">Subtitle</label>
 
-                <div class="form-group" data-ng-class="{ 'has-error' : formFeedDetails.inputSubtitle.$invalid && formFeedDetails.inputSubtitle.$touched }">
-
-                    <label for="input-subtitle">Subtitle</label>
-
-                    <input class="form-control"
-                           id="input-subtitle"
-                           name="inputSubtitle"
+                    <input type="text" id="subtitle" class="form-control" name="subtitle" placeholder="Enter a subtitle"
                            data-ng-model="vm.feed.subtitle"
                            data-ng-trim="true"
                            data-ng-maxlength="512"
-                           type="text"
-                           placeholder="Enter a subtitle"
-                           required>
+                           required></input>
 
-                    <p class="help-block" data-ng-show="formFeedDetails.inputSubtitle.$invalid && formFeedDetails.inputSubtitle.$touched">
-
+                    <p class="help-block" data-ng-show="form.subtitle.$invalid && form.subtitle.$touched">
                         Please enter a subtitle.
-
                     </p>
-
                 </div>
-
             </div>
-
         </div>
 
         <div class="row">
-
             <div class="col-sm-12">
+                <div class="form-group" data-ng-class="{ 'has-error' : form.description.$invalid && form.description.$touched }">
+                    <label for="description">Description</label>
 
-                <div class="form-group" data-ng-class="{ 'has-error' : formFeedDetails.inputDescription.$invalid && formFeedDetails.inputDescription.$touched }">
+                    <textarea id="description" class="form-control" name="description" placeholder="Enter a description"
+                        data-ng-model="vm.feed.description"
+                        data-ng-trim="true"
+                        data-ng-maxlength="512"
+                        required
+                        rows="3"></textarea>
 
-                    <label for="input-description">Description</label>
-
-                            <textarea class="form-control"
-                                      id="input-description"
-                                      name="inputDescription"
-                                      data-ng-model="vm.feed.description"
-                                      data-ng-trim="true"
-                                      data-ng-maxlength="512"
-                                      placeholder="Enter a description"
-                                      required
-                                      rows="3"></textarea>
-
-                            <p class="help-block" data-ng-show="formFeedDetails.inputDescription.$invalid && formFeedDetails.inputDescription.$touched">
-
-                                Please enter a description.
-
-                            </p>
-
+                    <p class="help-block" data-ng-show="form.description.$invalid && form.description.$touched">
+                        Please enter a description.
+                    </p>
                 </div>
-
             </div>
-
         </div>
 
         <div class="row">
-
             <div class="col-sm-6">
+                <div class="form-group" data-ng-class="{ 'has-error' : form.url.$invalid && form.url.$touched }">
+                    <label for="url">URL</label>
 
-                <div class="form-group" data-ng-class="{ 'has-error' : formFeedDetails.inputURL.$invalid && formFeedDetails.inputURL.$touched }">
+                    <input type="text" class="form-control" id="url" name="url" placeholder="Enter a URL"
+                        data-ng-model="vm.feed.url"
+                        data-ng-trim="true"
+                        data-ng-maxlength="512"
+                        required></input>
 
-                    <label for="input-url">URL</label>
-
-                    <input class="form-control"
-                           id="input-url"
-                           name="inputURL"
-                           data-ng-model="vm.feed.url"
-                           data-ng-trim="true"
-                           data-ng-maxlength="512"
-                           type="text"
-                           placeholder="Enter a URL"
-                           required>
-
-                    <p class="help-block" data-ng-show="formFeedDetails.inputURL.$invalid && formFeedDetails.inputURL.$touched">
-
+                    <p class="help-block" data-ng-show="form.url.$invalid && form.url.$touched">
                         Please enter a URL.
-
                     </p>
-
                 </div>
-
             </div>
 
             <div class="col-sm-6">
+                <div class="form-group" data-ng-class="{ 'has-error' : form.email.$invalid && form.email.$touched }">
+                    <label for="email">Email</label>
 
-                <div class="form-group" data-ng-class="{ 'has-error' : formFeedDetails.inputEmail.$invalid && formFeedDetails.inputEmail.$touched }">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter an email"
+                        data-ng-model="vm.feed.email"
+                        data-ng-trim="true"
+                        data-ng-maxlength="512"
+                        required></input>
 
-                    <label for="input-email">Email</label>
-
-                    <input class="form-control"
-                           id="input-email"
-                           name="inputEmail"
-                           data-ng-model="vm.feed.email"
-                           data-ng-trim="true"
-                           data-ng-maxlength="512"
-                           type="email"
-                           placeholder="Enter an email"
-                           required>
-
-                    <p class="help-block" data-ng-show="formFeedDetails.inputEmail.$invalid && formFeedDetails.inputEmail.$touched">
-
+                    <p class="help-block" data-ng-show="form.email.$invalid && form.email.$touched">
                         Please enter an email.
-
                     </p>
-
                 </div>
-
             </div>
-
         </div>
 
         <div class="row">
-
             <div class="col-sm-6">
+                <div class="form-group" data-ng-class="{ 'has-error' : form.copyright.$invalid && form.copyright.$touched }">
+                    <label for="copyright">Copyright</label>
 
-                <div class="form-group" data-ng-class="{ 'has-error' : formFeedDetails.inputCopyright.$invalid && formFeedDetails.inputCopyright.$touched }">
+                    <input type="text" class="form-control" id="copyright" name="copyright" placeholder="Enter a copyright"
+                        data-ng-model="vm.feed.copyright"
+                        data-ng-trim="true"
+                        data-ng-maxlength="512"
+                        required></input>
 
-                    <label for="input-copyright">Copyright</label>
-
-                    <input class="form-control"
-                           id="input-copyright"
-                           name="inputCopyright"
-                           data-ng-model="vm.feed.copyright"
-                           data-ng-trim="true"
-                           data-ng-maxlength="512"
-                           type="text"
-                           placeholder="Enter a copyright"
-                           required>
-
-                    <p class="help-block" data-ng-show="formFeedDetails.inputCopyright.$invalid && formFeedDetails.inputCopyright.$touched">
-
+                    <p class="help-block" data-ng-show="form.copyright.$invalid && form.copyright.$touched">
                         Please enter a copyright.
-
                     </p>
-
                 </div>
-
             </div>
 
             <div class="col-sm-6">
+                <div class="form-group" data-ng-class="{ 'has-error' : form.category.$invalid && form.category.$touched }">
+                    <label for="category">Category</label>
 
-                <div class="form-group" data-ng-class="{ 'has-error' : formFeedDetails.inputCategory.$invalid && formFeedDetails.inputCategory.$touched }">
+                    <input type="text" class="form-control" id="category" name="category" placeholder="Enter a category"
+                        data-ng-model="vm.feed.category"
+                        data-ng-trim="true"
+                        data-ng-maxlength="512"
+                        required></input>
 
-                    <label for="input-category">Category</label>
-
-                    <input class="form-control"
-                           id="input-category"
-                           name="inputCategory"
-                           data-ng-model="vm.feed.category"
-                           data-ng-trim="true"
-                           data-ng-maxlength="512"
-                           type="text"
-                           placeholder="Enter a category"
-                           required>
-
-                    <p class="help-block" data-ng-show="formFeedDetails.inputCategory.$invalid && formFeedDetails.inputCategory.$touched">
-
+                    <p class="help-block" data-ng-show="form.category.$invalid && form.category.$touched">
                         Please enter a category.
-
                     </p>
-
                 </div>
-
             </div>
-
         </div>
 
         <div class="row">
-
             <div class="col-sm-12">
-
-                <div class="form-group" data-ng-class="{ 'has-error' : formFeedDetails.inputKeywords.$invalid && formFeedDetails.inputKeywords.$touched }">
-
-                    <label for="input-keywords">Keywords</label>
-
+                <div class="form-group" data-ng-class="{ 'has-error' : form.keywords.$invalid && form.keywords.$touched }">
+                    <label for="keywords">Keywords</label>
                     <small>(Comma-separated list, no spaces)</small>
 
-                            <textarea class="form-control"
-                                      id="input-keywords"
-                                      name="inputKeywords"
-                                      data-ng-model="vm.feed.keywords"
-                                      data-ng-trim="true"
-                                      data-ng-maxlength="512"
-                                      placeholder="Enter keywords"
-                                      required
-                                      rows="3"></textarea>
+                    <textarea class="form-control" id="keywords" name="keywords" placeholder="Enter keywords"
+                        data-ng-model="vm.feed.keywords"
+                        data-ng-trim="true"
+                        data-ng-maxlength="512"
+                        required
+                        rows="3"></textarea>
 
-                            <p class="help-block" data-ng-show="formFeedDetails.inputKeywords.$invalid && formFeedDetails.inputKeywords.$touched">
-
-                                Please enter keywords.
-
-                            </p>
-
+                    <p class="help-block" data-ng-show="form.keywords.$invalid && form.keywords.$touched">
+                        Please enter keywords.
+                    </p>
                 </div>
-
             </div>
-
         </div>
 
+        <div class="row">
+            <div class="col-sm-12">
+                <button  type="button" class="btn btn-primary" data-ng-disabled="form.$invalid || vm.saving || !vm.dirty" data-ng-click="vm.save()">Save</button>
+                <span class="hs-form-saving-text">
+                    {{ vm.saving ? "Saving Changes..." : vm.dirty ? "" : "All Changes Saved." }}
+                </span>
+            </div>
+        </div>
     </form>
-
-    <div data-ng-if="vm.isLoading">
-
-        <p class="hs-form-loading-view">Loading Feed Form...</p>
-
-    </div>
-
 </section>

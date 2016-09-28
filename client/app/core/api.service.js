@@ -104,6 +104,24 @@
             return this.session.GET('feeds').then(parseAPIResponse);
         };
 
+        this.createFeed = function() {
+            return this.session.POST('feeds').then(parseAPIResponse);
+        }
+
+        this.updateFeed = function(feed) {
+            if (!feed || !feed.id) { return Promise.reject('No feed provided.'); }
+
+            var data = {};
+            copyProperties(feed, data, ['title', 'subtitle', 'description', 'type', 'copyright', 'url', 'email', 'category', 'keywords']);
+
+            return this.session.PUT('feeds/' + feed.id, {}, {}, data);
+        };
+
+        this.deleteFeed = function(feed) {
+            if (!feed || !feed.id) { return Promise.reject('No feed provided.'); }
+            return this.session.DELETE('feeds/' + feed.id);
+        };
+
         this.getMediaIDsForFeed = function(feed) {
             if (!feed || !feed.id) { return Promise.reject('No feed provided.'); }
             return this.session.GET('feeds/' + feed.id + '/media').then(function(result) { return result.data; });

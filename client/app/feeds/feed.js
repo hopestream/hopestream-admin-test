@@ -5,9 +5,9 @@
         .module('app.feeds')
         .controller('Feed', Feed);
 
-    Feed.$inject = ['$rootScope', '$stateParams', 'State', 'DTOptionsBuilder', 'DTColumnDefBuilder'];
+    Feed.$inject = ['$rootScope', '$stateParams', '$state', 'API', 'State', 'DTOptionsBuilder', 'DTColumnDefBuilder'];
 
-    function Feed($rootScope, $stateParams, State, DTOptionsBuilder, DTColumnDefBuilder) {
+    function Feed($rootScope, $stateParams, $state, API, State, DTOptionsBuilder, DTColumnDefBuilder) {
         var vm = this;
         var timeout = null;
         vm.state = State;
@@ -33,11 +33,26 @@
         vm.deleteFeed = deleteFeed;
 
         $rootScope.$watch(function() { return State.feedsByID && State.feedsByID[vm.id]; }, function() {
-            var previous = vm.feed;
             vm.feed = State.feedsByID && State.feedsByID[vm.id];
         });
 
         function deleteFeed() {
+            API.deleteFeed(vm.feed)
+                .then(function() {
+                    var index = -1;
+                    for (var i = 0; i < State.feeds.length; i++) {
+                        if (State.feeds[i].id == vm.id) { index = i; break; }
+                    }
+                    if (index >= 0) { State.feeds.splice(index, 1); }
+
+                    delete State.feedsByID[vm.id];
+                    $state.go('feed-list');
+                }, function(error) {
+                    toastr.options.timeOut = 2000;
+                    toastr.options.extendedTimeOut = 1000;
+                    toastr.options.positionClass = 'toast-bottom-right';
+                    toastr.error('<i class="fa fa-exclamation-triangle fa-lg"></i>&nbsp; Failed to delete feed: ' + error);
+                });
         }
     }
 })();

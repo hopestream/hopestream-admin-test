@@ -5,9 +5,9 @@
         .module('app.feeds')
         .controller('FeedList', FeedList);
 
-    FeedList.$inject = ['State', 'DTOptionsBuilder', 'DTColumnDefBuilder'];
+    FeedList.$inject = ['$state', 'API', 'State', 'DTOptionsBuilder', 'DTColumnDefBuilder'];
 
-    function FeedList(State, DTOptionsBuilder, authService) {
+    function FeedList($state, API, State, DTOptionsBuilder, authService) {
         var vm = this;
         vm.state = State;
         vm.dtOptions = DTOptionsBuilder.newOptions()
@@ -18,7 +18,16 @@
         vm.addFeed = addFeed;
 
         function addFeed() {
+            return API.createFeed()
+                .then(function(result) {
+                    var feed = result.feeds[0];
+                    feed.mediaIds = [];
+                    
+                    State.feeds.push(feed);
+                    State.feedsByID[feed.id] = feed;
 
+                    $state.go('feed', { id: feed.id });
+                });
         }
     }
 })();
