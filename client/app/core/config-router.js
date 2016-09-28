@@ -101,6 +101,36 @@
                     }
                 }
             })
+            .state('series-list', {
+                url: '/series',
+                views: {
+                    'navbar': {
+                        templateUrl: 'app/navbar/navbar.html',
+                        controller: 'Navbar',
+                        controllerAs: 'vm'
+                    },
+                    'content': {
+                        templateUrl: 'app/series/series-list.html',
+                        controller: 'SeriesList',
+                        controllerAs: 'vm'
+                    }
+                }
+            })
+            .state('series', {
+                url: '/series/:id',
+                views: {
+                    'navbar': {
+                        templateUrl: 'app/navbar/navbar.html',
+                        controller: 'Navbar',
+                        controllerAs: 'vm'
+                    },
+                    'content': {
+                        templateUrl: 'app/series/series.html',
+                        controller: 'Series',
+                        controllerAs: 'vm'
+                    }
+                }
+            })
             .state('feed-list', {
                 url: '/feeds',
                 views: {

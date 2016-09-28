@@ -8,6 +8,7 @@
         'app.media',
         'app.navbar',
         'app.organization',
+        'app.series',
         'app.upload'
     ]);
 })();

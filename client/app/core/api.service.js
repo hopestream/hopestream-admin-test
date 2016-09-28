@@ -70,6 +70,29 @@
             return this.session.GET('series').then(parseAPIResponse);
         };
 
+        this.createSeries = function() {
+            return this.session.POST('series').then(parseAPIResponse);
+        }
+
+        this.updateSeries = function(series) {
+            if (!series || !series.id) { return Promise.reject('No series provided.'); }
+
+            var data = {};
+            copyProperties(series, data, ['name', 'description']);
+
+            return this.session.PUT('series/' + series.id, {}, {}, data);
+        };
+
+        this.uploadImageForSeries = function(series, image) {
+            if (!series || !series.id) { return Promise.reject('No series provided.'); }
+            return this.session.UPLOAD('series/' + series.id + '/image', {}, {}, { 'image': image });
+        };
+
+        this.deleteSeries = function(series) {
+            if (!series || !series.id) { return Promise.reject('No series provided.'); }
+            return this.session.DELETE('series/' + series.id);
+        };
+
         this.getSpeakers = function() {
             return this.session.GET('speakers/all').then(parseAPIResponse);
         };

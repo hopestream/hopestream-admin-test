@@ -4,8 +4,8 @@
     var TABS = {
         'home': 'organization', 'organization': 'organization',
         'media-list': 'media', 'media': 'media', 'upload': 'media',
-        'feeds': 'feeds', 'feed-details': 'feeds',
-        'usage': 'usage'
+        'series-list': 'series', 'series': 'series',
+        'feed-list': 'feeds', 'feed': 'feeds'
     };
 
     angular

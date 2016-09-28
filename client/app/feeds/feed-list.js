@@ -7,7 +7,7 @@
 
     FeedList.$inject = ['$state', 'API', 'State', 'DTOptionsBuilder', 'DTColumnDefBuilder'];
 
-    function FeedList($state, API, State, DTOptionsBuilder, authService) {
+    function FeedList($state, API, State, DTOptionsBuilder, DTColumnDefBuilder) {
         var vm = this;
         vm.state = State;
         vm.dtOptions = DTOptionsBuilder.newOptions()
@@ -22,7 +22,7 @@
                 .then(function(result) {
                     var feed = result.feeds[0];
                     feed.mediaIds = [];
-                    
+
                     State.feeds.push(feed);
                     State.feedsByID[feed.id] = feed;
 
