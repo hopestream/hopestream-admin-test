@@ -5,14 +5,13 @@
         .module('app.series')
         .controller('Series', Series);
 
-    Series.$inject = ['$rootScope', '$stateParams', '$state', '$timeout', 'toastr', 'API', 'State', 'Hash', 'DTOptionsBuilder', 'DTColumnDefBuilder'];
+    Series.$inject = ['$rootScope', '$stateParams', '$state', '$timeout', 'toastr', 'API', 'State', 'DTOptionsBuilder', 'DTColumnDefBuilder'];
 
-    function Series($rootScope, $stateParams, $state, $timeout, toastr, API, State, Hash, DTOptionsBuilder, DTColumnDefBuilder) {
+    function Series($rootScope, $stateParams, $state, $timeout, toastr, API, State, DTOptionsBuilder, DTColumnDefBuilder) {
         var vm = this;
         var timeout = null;
         vm.state = State;
         vm.id = $stateParams.id;
-        vm.hash = Hash.encode(parseInt($stateParams.id, 10));
         vm.series = undefined;
         vm.dtOptions = DTOptionsBuilder.newOptions()
             .withBootstrap()
@@ -32,20 +31,25 @@
             DTColumnDefBuilder.newColumnDef(4).withOption('width', '20%')
         ];
 
-        vm.imageUrl = HopeStream.S3_URL + 'series/' + vm.hash + '/image.jpg?' + new Date().getTime();
-        vm.shouldShowImage = true;
+        $rootScope.$watch(function() { return State.seriesByID && State.seriesByID[vm.id]; }, function() {
+            var previous = vm.series;
+            vm.series = State.seriesByID && State.seriesByID[vm.id];
 
-        $rootScope.$on('imageUploadCompleted', function(event, args) {
-            // reload the image by adding a random query string parameter
-            vm.imageUrl = vm.imageUrl.split('?')[0] + '?' + new Date().getTime();
+            if (vm.series && !previous) {
+                updateImageURL();
+            }
+        });
+
+        vm.imageUrl = undefined;
+        vm.shouldShowImage = false;
+
+        $rootScope.$on('imageUploadCompleted', updateImageURL);
+        function updateImageURL() {
+            vm.imageUrl = vm.series && vm.series.imageUrl + '?' + new Date().getTime();
 
             vm.shouldShowImage = false;
             $timeout(function() { vm.shouldShowImage = true; }, 0);
-        });
-
-        $rootScope.$watch(function() { return State.seriesByID && State.seriesByID[vm.id]; }, function() {
-            vm.series = State.seriesByID && State.seriesByID[vm.id];
-        });
+        }
 
         vm.deleteSeries = function() {
             API.deleteSeries(vm.series)

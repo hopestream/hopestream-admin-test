@@ -15,26 +15,46 @@
         vm.hash = Hash.encode(parseInt($stateParams.id, 10));
         vm.media = undefined;
 
-        vm.imageUrl = HopeStream.S3_URL + 'media/' + vm.hash + '/image.jpg?' + new Date().getTime();
-        vm.shouldShowImage = true;
-
-        $rootScope.$on('imageUploadCompleted', function(event, args) {
-            // reload the image by adding a random query string parameter
-            vm.imageUrl = vm.imageUrl.split('?')[0] + '?' + new Date().getTime();
-
-            vm.shouldShowImage = false;
-            $timeout(function() { vm.shouldShowImage = true; }, 0);
-        });
-
         $rootScope.$watch(function() { return State.mediaByID && State.mediaByID[vm.id]; }, function() {
             var previous = vm.media;
             vm.media = State.mediaByID && State.mediaByID[vm.id];
 
             if (vm.media && !previous) {
+                updateImageURL();
                 updateVideoURLs();
                 updateAudioURLs();
                 updateUsageStatistics();
             }
+        });
+
+        vm.imageUrl = undefined;
+        vm.shouldShowImage = false;
+
+        $rootScope.$on('imageUploadCompleted', updateImageURL);
+        function updateImageURL() {
+            vm.imageUrl = vm.media && vm.media.imageUrl + '?' + new Date().getTime();
+
+            vm.shouldShowImage = false;
+            $timeout(function() { vm.shouldShowImage = true; }, 0);
+        }
+
+        vm.setMediaImageToSeries = function() {
+            API.setMediaImageToSeries(vm.media, State.seriesByID[vm.media.seriesId]).then(function(result) {
+                var temp = result.media[0]; vm.media.imageUrl = temp.imageUrl; vm.media.thumbnailUrl = temp.thumbnailUrl;
+                updateImageURL();
+            });
+        };
+
+        vm.setMediaImageToOrganization = function() {
+            API.setMediaImageToOrganization(vm.media, State.organization).then(function(result) {
+                var temp = result.media[0]; vm.media.imageUrl = temp.imageUrl; vm.media.thumbnailUrl = temp.thumbnailUrl;
+                updateImageURL();
+            });
+        };
+
+        vm.series = undefined;
+        $rootScope.$watch(function() { return vm.media && vm.media.seriesId && State.seriesByID && State.seriesByID[vm.media.seriesId]; }, function() {
+            vm.series = vm.media && vm.media.seriesId && State.seriesByID && State.seriesByID[vm.media.seriesId];
         });
 
         var updateVideoURLs = function() {

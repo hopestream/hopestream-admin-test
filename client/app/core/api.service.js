@@ -47,8 +47,20 @@
 
         this.uploadImageForMedia = function(media, image) {
             if (!media || !media.id) { return Promise.reject('No media provided.'); }
-            return this.session.UPLOAD('media/' + media.id + '/image', {}, {}, { 'image': image });
+            return this.session.UPLOAD('media/' + media.id + '/image', {}, {}, { 'image': image }).then(parseAPIResponse);
         };
+
+        this.setMediaImageToSeries = function(media, series) {
+            if (!media || !media.id) { return Promise.reject('No media provided.'); }
+            if (!series || !series.id) { return Promise.reject('No series provided.'); }
+            return this.session.PUT('media/' + media.id + '/image', { 'seriesId': series.id }).then(parseAPIResponse);
+        }
+
+        this.setMediaImageToOrganization = function(media, organization) {
+            if (!media || !media.id) { return Promise.reject('No media provided.'); }
+            if (!organization || !organization.id) { return Promise.reject('No organization provided.'); }
+            return this.session.PUT('media/' + media.id + '/image', { 'organizationId': organization.id }).then(parseAPIResponse);
+        }
 
         this.getUploadPolicyForMedia = function(media, contentType) {
             if (!media || !media.id) { return Promise.reject('No media provided.'); }
@@ -85,7 +97,7 @@
 
         this.uploadImageForSeries = function(series, image) {
             if (!series || !series.id) { return Promise.reject('No series provided.'); }
-            return this.session.UPLOAD('series/' + series.id + '/image', {}, {}, { 'image': image });
+            return this.session.UPLOAD('series/' + series.id + '/image', {}, {}, { 'image': image }).then(parseAPIResponse);
         };
 
         this.deleteSeries = function(series) {
@@ -112,7 +124,7 @@
 
         this.uploadImageForSpeaker = function(speaker, image) {
             if (!speaker || !speaker.id) { return Promise.reject('No speaker provided.'); }
-            return this.session.UPLOAD('speakers/' + speaker.id + '/image', {}, {}, { 'image': image });
+            return this.session.UPLOAD('speakers/' + speaker.id + '/image', {}, {}, { 'image': image }).then(parseAPIResponse);
         };
 
         this.deleteSpeaker = function(speaker) {
@@ -135,7 +147,7 @@
 
         this.uploadImageForOrganization = function(organization, image) {
             if (!organization || !organization.id) { return Promise.reject('No organization provided.'); }
-            return this.session.UPLOAD('organizations/' + organization.id + '/image', {}, {}, { 'image': image });
+            return this.session.UPLOAD('organizations/' + organization.id + '/image', {}, {}, { 'image': image }).then(parseAPIResponse);
         };
 
         this.getUsageForOrganization = function(organization) {

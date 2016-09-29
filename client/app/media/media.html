@@ -64,16 +64,38 @@
 
         <h2>Image</h2>
 
-        <div class="row" data-uib-collapse="vm.isImageSectionCollapsed">
-            <div class="col-sm-4 hs-media-image-section-instructions">
-                <p>Upload an image for this media.</p>
-                <p>Image must be in <strong>.jpg</strong> format.</p>
+        <div data-uib-collapse="vm.isImageSectionCollapsed">
+            <div class="row">
+                <div class="col-sm-4 hs-media-image-section-instructions">
+                    <p>Upload an image for this media.</p>
+                    <p>Image must be in <strong>.jpg</strong> format.</p>
 
-                <hs-image-upload media-id="{{ vm.id }}"></hs-image-upload>
+                    <hs-image-upload media-id="{{ vm.id }}"></hs-image-upload>
+                </div>
+
+                <div class="col-sm-8 hs-media-image-section-preview" data-ng-if="vm.shouldShowImage">
+                    <img class="img-responsive" alt="Poster Image" data-ng-src="{{ vm.imageUrl }}" data-hs-media-image>
+                </div>
             </div>
 
-            <div class="col-sm-8 hs-media-image-section-preview" data-ng-if="vm.shouldShowImage">
-                <img class="img-responsive" alt="Poster Image" data-ng-src="{{ vm.imageUrl }}" data-hs-media-image>
+            <div class="row">
+                <div data-ng-if="vm.state.organization.imageUrl || vm.series.imageUrl">
+                    <div class="col-xs-12 hs-media-image-section-instructions">
+                        <h5>or choose one:</h5>
+                    </div>
+
+                    <div class="col-sm-4 col-xs-6" data-ng-if="vm.series.imageUrl">
+                        <p>Series Image</p>
+                        <img class="img-responsive" data-ng-src="{{ vm.series.imageUrl }}"></img>
+                        <button class="btn btn-default hs-media-image-select-button" data-ng-click="vm.setMediaImageToSeries()">Select</button>
+                    </div>
+
+                    <div class="col-sm-4 col-xs-6" data-ng-if="vm.state.organization.imageUrl">
+                        <p>Church Image</p>
+                        <img class="img-responsive" data-ng-src="{{ vm.state.organization.imageUrl }}"></img>
+                        <button class="btn btn-default hs-media-image-select-button" data-ng-click="vm.setMediaImageToOrganization()">Select</button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

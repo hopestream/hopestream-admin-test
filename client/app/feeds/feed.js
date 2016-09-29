@@ -32,20 +32,25 @@
             DTColumnDefBuilder.newColumnDef(4).withOption('width', '20%')
         ];
 
-        vm.imageUrl = HopeStream.S3_URL + 'feed/' + vm.hash + '/thumbnail.jpg?' + new Date().getTime();
-        vm.shouldShowImage = true;
+        $rootScope.$watch(function() { return State.feedsByID && State.feedsByID[vm.id]; }, function() {
+            var previous = vm.feed
+            vm.feed = State.feedsByID && State.feedsByID[vm.id];
 
-        $rootScope.$on('imageUploadCompleted', function(event, args) {
-            // reload the image by adding a random query string parameter
-            vm.imageUrl = vm.imageUrl.split('?')[0] + '?' + new Date().getTime();
+            if (vm.feed && !previous) {
+                updateImageURL();
+            }
+        });
+
+        vm.imageUrl = undefined;
+        vm.shouldShowImage = false;
+
+        $rootScope.$on('imageUploadCompleted', updateImageURL);
+        function updateImageURL() {
+            vm.imageUrl = HopeStream.STATIC_URL + 'feed/' + vm.hash + '/thumbnail.jpg?' + new Date().getTime();
 
             vm.shouldShowImage = false;
             $timeout(function() { vm.shouldShowImage = true; }, 0);
-        });
-
-        $rootScope.$watch(function() { return State.feedsByID && State.feedsByID[vm.id]; }, function() {
-            vm.feed = State.feedsByID && State.feedsByID[vm.id];
-        });
+        }
 
         vm.deleteFeed = function() {
             API.deleteFeed(vm.feed)

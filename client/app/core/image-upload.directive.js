@@ -66,20 +66,29 @@
             if ($scope.feedId) {
                 vm.upload = API.uploadImageForFeed(State.feedsByID[$scope.feedId], vm.file);
             } else if ($scope.mediaId) {
-                vm.upload = API.uploadImageForMedia(State.mediaByID[$scope.mediaId], vm.file);
+                var object = State.mediaByID[$scope.mediaId];
+                vm.upload = API.uploadImageForMedia(object, vm.file);
+                vm.onSuccess = function(result) { var temp = result.media[0]; object.imageUrl = temp.imageUrl; object.thumbnailUrl = temp.thumbnailUrl; }
             } else if ($scope.organizationId) {
-                vm.upload = API.uploadImageForOrganization(State.organization, vm.file);
+                var object = State.organization;
+                vm.upload = API.uploadImageForOrganization(object, vm.file);
+                vm.onSuccess = function(result) { var temp = result.organizations[0]; object.imageUrl = temp.imageUrl; object.thumbnailUrl = temp.thumbnailUrl; }
             } else if ($scope.seriesId) {
-                vm.upload = API.uploadImageForSeries(State.seriesByID[$scope.seriesId], vm.file);
+                var object = State.seriesByID[$scope.seriesId];
+                vm.upload = API.uploadImageForSeries(object, vm.file);
+                vm.onSuccess = function(result) { var temp = result.series[0]; object.imageUrl = temp.imageUrl; object.thumbnailUrl = temp.thumbnailUrl; }
             } else if ($scope.speakerId) {
-                vm.upload = API.uploadImageForSpeaker(State.speakersByID[$scope.speakerId], vm.file);
+                var object = State.speakersByID[$scope.speakerId];
+                vm.upload = API.uploadImageForSpeaker(object, vm.file);
+                vm.onSuccess = function(result) { var temp = result.speakers[0]; object.imageUrl = temp.imageUrl; object.thumbnailUrl = temp.thumbnailUrl; }
             }
 
-            vm.upload.then(function(response) {
+            vm.upload.then(function(result) {
                 vm.status = vm.UPLOAD_STATUS_COMPLETE;
 
+                if (vm.onSuccess) { vm.onSuccess(result); }
                 deferred.resolve();
-                $rootScope.$broadcast('imageUploadCompleted', { hash: vm.hash });
+                $rootScope.$broadcast('imageUploadCompleted');
             }, function(error) {
                 if (error && error.status === -1) { // User cancelled the upload
                     vm.status = vm.UPLOAD_STATUS_WAITING;
