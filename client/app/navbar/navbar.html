@@ -21,11 +21,6 @@
             </ul>
 
             <ul class="nav navbar-nav navbar-right" ng-show="vm.state.loggedIn">
-                <li>
-                    <button class="btn btn-default navbar-btn" data-ui-sref="upload">
-                        <i class="fa fa-lg fa-cloud-upload"></i>&nbsp; Upload
-                    </button>
-                </li>
                 <li data-uib-dropdown data-is-open="status.isopen">
                     <a data-uib-dropdown-toggle>
                         {{ vm.state.organization.name }} <span class="caret"></span>

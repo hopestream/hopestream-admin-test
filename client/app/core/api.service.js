@@ -25,8 +25,8 @@
             return this.session.GET('media').then(parseAPIResponse);
         };
 
-        this.createMedia = function() {
-            return this.session.POST('media').then(parseAPIResponse);
+        this.createMedia = function(params) {
+            return this.session.POST('media', params).then(parseAPIResponse);
         }
 
         this.updateMedia = function(media) {
@@ -39,6 +39,15 @@
 
             return this.session.PUT('media/' + media.id, {}, {}, data);
         };
+
+        this.updateMediaURLs = function(media) {
+            if (!media || !media.id) { return Promise.reject('No media provided.'); }
+
+            var data = {};
+            copyProperties(media, data, ['streamUrl', 'videoUrl', 'audioUrl']);
+
+            return this.session.PUT('media/' + media.id, {}, {}, data);
+        }
 
         this.updateMediaStatus = function(media, status) {
             if (!media || !media.id) { return Promise.reject('No media provided.'); }

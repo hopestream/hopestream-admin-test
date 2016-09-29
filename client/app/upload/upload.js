@@ -5,9 +5,9 @@
         .module('app.upload')
         .controller('Upload', Upload);
 
-    Upload.$inject = ['$rootScope', '$scope', '$q', '$compile', 'API', 'State', 'Upload'];
+    Upload.$inject = ['$rootScope', '$scope', '$state', '$q', '$compile', 'API', 'State', 'Upload'];
 
-    function Upload($rootScope, $scope, $q, $compile, API, State, Upload) {
+    function Upload($rootScope, $scope, $state, $q, $compile, API, State, Upload) {
         var vm = this;
         vm.state = State;
         vm.selectedFiles = [];
@@ -36,6 +36,16 @@
         $scope.$watch('vm.hasActiveUploads', watchHasActiveUploads);
         $rootScope.$on('mediaUploadCleared', function(event, args) { clearMediaUploadDirective(args.mediaId); });
         $rootScope.uploadProgressManager = new UploadProgress.Manager();
+
+        vm.createCustomMedia = function() {
+            API.createMedia({ status: -1 })
+                .then(function(result) {
+                    var media = result.media[0];
+                    State.media.push(media);
+                    State.mediaByID[media.id] = media;
+                    $state.go('media', { id: media.id });
+                });
+        }
 
         function initiateUploads() {
             if (!vm.selectedFiles || vm.selectedFiles.length == 0) { return; }

@@ -169,8 +169,8 @@
                             <span>HopeStream Mobile App</span>
                         </a>
                     </li>
-                    <li>
-                        <a data-ng-repeat="feed in vm.state.feeds | orderBy: 'name'" data-ng-click="vm.addFeedWithID(feed.id)" data-dismiss="modal" style="display:block;padding-top:14px;padding-bottom:14px;border-bottom: 1px solid #EDEDED;">
+                    <li data-ng-if="vm.media.status >= 0" data-ng-repeat="feed in vm.state.feeds | orderBy: 'name'">
+                        <a data-ng-click="vm.addFeedWithID(feed.id)" data-dismiss="modal" style="display:block;padding-top:14px;padding-bottom:14px;border-bottom: 1px solid #EDEDED;">
                             <span>{{ feed.title }} - {{ feed.type === 0 ? 'Video Podcast' : 'Audio Podcast' }}</span>
                         </a>
                     </li>

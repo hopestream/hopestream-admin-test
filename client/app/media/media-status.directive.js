@@ -37,6 +37,7 @@
                 case 4: return 'hs-media-status-danger';
                 case 5: return 'hs-media-status-danger';
                 case 6: return 'hs-media-status-danger';
+                case -1: return 'hs-media-status-success';
                 default: return 'hs-media-status-warning';
             }
         }
@@ -50,6 +51,7 @@
                 case 4: return 'fa-exclamation-circle';
                 case 5: return 'fa-exclamation-circle';
                 case 6: return 'fa-exclamation-circle';
+                case -1: return 'fa-check-circle';
                 default: return 'fa-question-circle';
             }
         }
@@ -63,6 +65,7 @@
                 case 4: return 'Error';
                 case 5: return 'Deleted By User';
                 case 6: return 'Deleted';
+                case -1: return 'Custom';
                 default: return 'Unknown';
             }
         }

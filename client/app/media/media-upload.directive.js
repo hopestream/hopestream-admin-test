@@ -101,7 +101,18 @@
 
             // If we are in the Media details page, and we are replacing media, hitting cancel SHOULD NOT delete the media entry
             // If we are in the Upload page, and we are uploading a brand new media, hitting cancel SHOULD delete the media entry
-            if (!vm.isReplacingMedia) { API.updateMediaStatus(vm.media, 5); }
+            if (!vm.isReplacingMedia) {
+                API.deleteMedia(vm.media)
+                    .then(function() {
+                        var index = -1;
+                        for (var i = 0; i < State.media.length; i++) {
+                            if (State.media[i].id == vm.media.id) { index = i; break; }
+                        }
+                        if (index >= 0) { State.media.splice(index, 1); }
+
+                        delete State.mediaByID[vm.id];
+                    });
+            }
         }
 
         function uploadProgress() {
