@@ -118,8 +118,8 @@
             return this.session.GET('speakers/all').then(parseAPIResponse);
         };
 
-        this.createSpeaker = function() {
-            return this.session.POST('speakers').then(parseAPIResponse);
+        this.createSpeaker = function(params) {
+            return this.session.POST('speakers', params).then(parseAPIResponse);
         }
 
         this.updateSpeaker = function(speaker) {
@@ -140,6 +140,11 @@
             if (!speaker || !speaker.id) { return Promise.reject('No speaker provided.'); }
             return this.session.DELETE('speakers/' + speaker.id);
         };
+
+        this.claimSpeaker = function(speaker) {
+            if (!speaker || !speaker.id) { return Promise.reject('No speaker provided.'); }
+            return this.session.POST('speakers/' + speaker.id + '/claim');
+        }
 
         this.getOrganizations = function() {
             return this.session.GET('organizations').then(parseAPIResponse);
