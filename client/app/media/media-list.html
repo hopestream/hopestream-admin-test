@@ -46,7 +46,14 @@
                         </a>
                     </td>
 
-                    <td>{{ vm.getSpeakerNames(media); }}</td>
+                    <td data-ng-if="media.speakerIds.length > 0">
+                        <div data-ng-repeat="speakerId in media.speakerIds" data-ng-init="speaker = vm.state.speakersByID[speakerId]">
+                            {{ speaker.name ? speaker.name : 'Untitled' }}
+                        </div>
+                    </td>
+                    <td data-ng-if="media.speakerIds.length == 0">
+                        <div>--</div>
+                    </td>
 
                     <td>
                         <hs-media-status status="{{ media.status }}"></hs-media-status>

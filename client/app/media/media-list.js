@@ -27,24 +27,5 @@
             DTColumnDefBuilder.newColumnDef(3).withOption('width', '30%'),
             DTColumnDefBuilder.newColumnDef(4).withOption('width', '20%')
         ];
-        vm.getSpeakerNames = getSpeakerNames;
-
-        function getSpeakerNames(media) {
-            if (State.speakersByID && media.speakerIds) {
-                var result = "";
-                for (var i = 0; i < media.speakerIds.length; i++) {
-                    var speakerID = media.speakerIds[i];
-                    var speaker = State.speakersByID[speakerID];
-                    if (speaker) {
-                        if (result.length != 0) { result = result + '\n'; }
-                        result = result + speaker.name;
-                    }
-                }
-
-                if (result.length != 0) { return result; }
-            }
-
-            return "--";
-        };
     }
 })();

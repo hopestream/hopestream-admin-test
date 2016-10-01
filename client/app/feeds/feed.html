@@ -8,7 +8,7 @@
     </p>
 
     <div class="hs-expand-collapse-all-buttons">
-        <button class="btn btn-default" data-ng-click="
+        <button class="btn btn-collapsible" data-ng-click="
             vm.isDetailsSectionCollapsed   = false;
             vm.isImageSectionCollapsed     = false;
             vm.isMediaListSectionCollapsed = false;
@@ -16,7 +16,7 @@
             <i class="fa fa-2x fa-angle-down"></i>
         </button>
 
-        <button class="btn btn-default" data-ng-click="
+        <button class="btn btn-collapsible" data-ng-click="
             vm.isDetailsSectionCollapsed   = true;
             vm.isImageSectionCollapsed     = true;
             vm.isMediaListSectionCollapsed = true;
@@ -27,7 +27,7 @@
 
     <!-- FORM -->
     <section class="hs-content-section">
-        <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isDetailsSectionCollapsed = !vm.isDetailsSectionCollapsed">
+        <button type="button" class="btn btn-collapsible pull-right hs-collapse-toggle" data-ng-click="vm.isDetailsSectionCollapsed = !vm.isDetailsSectionCollapsed">
             <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isDetailsSectionCollapsed"></i>
             <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isDetailsSectionCollapsed"></i>
         </button>
@@ -41,7 +41,7 @@
 
     <!-- IMAGE -->
     <section class="hs-content-section">
-        <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isImageSectionCollapsed = !vm.isImageSectionCollapsed">
+        <button type="button" class="btn btn-collapsible pull-right hs-collapse-toggle" data-ng-click="vm.isImageSectionCollapsed = !vm.isImageSectionCollapsed">
             <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isImageSectionCollapsed"></i>
             <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isImageSectionCollapsed"></i>
         </button>
@@ -64,7 +64,7 @@
 
     <!-- MEDIA LIST -->
     <section class="hs-content-section">
-        <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isMediaListSectionCollapsed = !vm.isMediaListSectionCollapsed">
+        <button type="button" class="btn btn-collapsible pull-right hs-collapse-toggle" data-ng-click="vm.isMediaListSectionCollapsed = !vm.isMediaListSectionCollapsed">
             <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isMediaListSectionCollapsed"></i>
             <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isMediaListSectionCollapsed"></i>
         </button>
@@ -119,7 +119,14 @@
                                         </a>
                                     </td>
 
-                                    <td>{{ vm.getSpeakerNames(media); }}</td>
+                                    <td data-ng-if="media.speakerIds.length > 0">
+                                        <div data-ng-repeat="speakerId in media.speakerIds" data-ng-init="speaker = vm.state.speakersByID[speakerId]">
+                                            {{ speaker.name ? speaker.name : 'Untitled' }}
+                                        </div>
+                                    </td>
+                                    <td data-ng-if="media.speakerIds.length == 0">
+                                        <div>--</div>
+                                    </td>
 
                                     <td>
                                         <hs-media-status status="{{ media.status }}"></hs-media-status>
@@ -135,7 +142,7 @@
 
     <!-- ADVANCED -->
     <section class="hs-content-section">
-        <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isAdvancedSectionCollapsed = !vm.isAdvancedSectionCollapsed">
+        <button type="button" class="btn btn-collapsible pull-right hs-collapse-toggle" data-ng-click="vm.isAdvancedSectionCollapsed = !vm.isAdvancedSectionCollapsed">
             <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isAdvancedSectionCollapsed"></i>
             <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isAdvancedSectionCollapsed"></i>
         </button>

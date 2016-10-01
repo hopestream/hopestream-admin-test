@@ -14,7 +14,7 @@
     </section>
 
     <div class="hs-expand-collapse-all-buttons">
-        <button class="btn btn-default" data-ng-click="
+        <button class="btn btn-collapsible" data-ng-click="
             vm.isDetailsSectionCollapsed   = false;
             vm.isImageSectionCollapsed     = false;
             vm.isVideoSectionCollapsed     = false;
@@ -26,7 +26,7 @@
             <i class="fa fa-2x fa-angle-down"></i>
         </button>
 
-        <button class="btn btn-default" data-ng-click="
+        <button class="btn btn-collapsible" data-ng-click="
             vm.isDetailsSectionCollapsed   = true;
             vm.isImageSectionCollapsed     = true;
             vm.isVideoSectionCollapsed     = true;
@@ -42,7 +42,7 @@
 
     <!-- FORM -->
     <section class="hs-content-section">
-        <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isDetailsSectionCollapsed = !vm.isDetailsSectionCollapsed">
+        <button type="button" class="btn btn-collapsible pull-right hs-collapse-toggle" data-ng-click="vm.isDetailsSectionCollapsed = !vm.isDetailsSectionCollapsed">
             <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isDetailsSectionCollapsed"></i>
             <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isDetailsSectionCollapsed"></i>
         </button>
@@ -57,7 +57,7 @@
 
     <!-- IMAGE -->
     <section class="hs-content-section">
-        <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isImageSectionCollapsed = !vm.isImageSectionCollapsed">
+        <button type="button" class="btn btn-collapsible pull-right hs-collapse-toggle" data-ng-click="vm.isImageSectionCollapsed = !vm.isImageSectionCollapsed">
             <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isImageSectionCollapsed"></i>
             <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isImageSectionCollapsed"></i>
         </button>
@@ -81,16 +81,16 @@
             <div class="row">
                 <div data-ng-if="vm.state.organization.imageUrl || vm.series.imageUrl">
                     <div class="col-xs-12 hs-media-image-section-instructions">
-                        <h5>or choose one:</h5>
+                        <p><strong>or choose one:</strong></p>
                     </div>
 
-                    <div class="col-sm-4 col-xs-6" data-ng-if="vm.series.imageUrl">
+                    <div class="col-sm-4 col-xs-6 hs-media-image-section-selection" data-ng-if="vm.series.imageUrl">
                         <p>Series Image</p>
                         <img class="img-responsive" data-ng-src="{{ vm.series.imageUrl }}"></img>
                         <button class="btn btn-default hs-media-image-select-button" data-ng-click="vm.setMediaImageToSeries()">Select</button>
                     </div>
 
-                    <div class="col-sm-4 col-xs-6" data-ng-if="vm.state.organization.imageUrl">
+                    <div class="col-sm-4 col-xs-6 hs-media-image-section-selection" data-ng-if="vm.state.organization.imageUrl">
                         <p>Church Image</p>
                         <img class="img-responsive" data-ng-src="{{ vm.state.organization.imageUrl }}"></img>
                         <button class="btn btn-default hs-media-image-select-button" data-ng-click="vm.setMediaImageToOrganization()">Select</button>
@@ -103,7 +103,7 @@
 
     <!-- URLs -->
     <section class="hs-content-section" data-ng-if="vm.media.status < 0">
-        <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isVideoSectionCollapsed = !vm.isVideoSectionCollapsed">
+        <button type="button" class="btn btn-collapsible pull-right hs-collapse-toggle" data-ng-click="vm.isVideoSectionCollapsed = !vm.isVideoSectionCollapsed">
             <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isVideoSectionCollapsed"></i>
             <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isVideoSectionCollapsed"></i>
         </button>
@@ -118,7 +118,7 @@
 
     <!-- VIDEO -->
     <section class="hs-content-section" data-ng-if="vm.media.type === 0 && vm.media.status >= 0">
-        <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isVideoSectionCollapsed = !vm.isVideoSectionCollapsed">
+        <button type="button" class="btn btn-collapsible pull-right hs-collapse-toggle" data-ng-click="vm.isVideoSectionCollapsed = !vm.isVideoSectionCollapsed">
             <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isVideoSectionCollapsed"></i>
             <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isVideoSectionCollapsed"></i>
         </button>
@@ -172,7 +172,7 @@
 
     <!-- AUDIO -->
     <section class="hs-content-section" data-ng-if="vm.media.status >= 0">
-        <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isAudioSectionCollapsed = !vm.isAudioSectionCollapsed">
+        <button type="button" class="btn btn-collapsible pull-right hs-collapse-toggle" data-ng-click="vm.isAudioSectionCollapsed = !vm.isAudioSectionCollapsed">
             <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isAudioSectionCollapsed"></i>
             <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isAudioSectionCollapsed"></i>
         </button>
@@ -225,7 +225,7 @@
 
     <!-- PLAY COUNTS -->
     <section class="hs-content-section" data-ng-if="vm.media.status === 3">
-        <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isPlaysSectionCollapsed = !vm.isPlaysSectionCollapsed">
+        <button type="button" class="btn btn-collapsible pull-right hs-collapse-toggle" data-ng-click="vm.isPlaysSectionCollapsed = !vm.isPlaysSectionCollapsed">
             <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isPlaysSectionCollapsed"></i>
             <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isPlaysSectionCollapsed"></i>
         </button>
@@ -248,7 +248,7 @@
 
     <!-- BANDWIDTH -->
     <section class="hs-content-section" data-ng-if="vm.media.status === 3">
-        <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isBandwidthSectionCollapsed = !vm.isBandwidthSectionCollapsed">
+        <button type="button" class="btn btn-collapsible pull-right hs-collapse-toggle" data-ng-click="vm.isBandwidthSectionCollapsed = !vm.isBandwidthSectionCollapsed">
             <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isBandwidthSectionCollapsed"></i>
             <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isBandwidthSectionCollapsed"></i>
         </button>
@@ -270,7 +270,7 @@
 
     <!-- USAGE DATA -->
     <section class="hs-content-section" data-ng-if="vm.media.status === 3">
-        <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isUsageSectionCollapsed = !vm.isUsageSectionCollapsed">
+        <button type="button" class="btn btn-collapsible pull-right hs-collapse-toggle" data-ng-click="vm.isUsageSectionCollapsed = !vm.isUsageSectionCollapsed">
             <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isUsageSectionCollapsed"></i>
             <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isUsageSectionCollapsed"></i>
         </button>
@@ -352,7 +352,7 @@
 
     <!-- ADVANCED -->
     <section class="hs-content-section">
-        <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isAdvancedSectionCollapsed = !vm.isAdvancedSectionCollapsed">
+        <button type="button" class="btn btn-collapsible pull-right hs-collapse-toggle" data-ng-click="vm.isAdvancedSectionCollapsed = !vm.isAdvancedSectionCollapsed">
             <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isAdvancedSectionCollapsed"></i>
             <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isAdvancedSectionCollapsed"></i>
         </button>

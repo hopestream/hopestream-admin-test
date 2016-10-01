@@ -10,20 +10,7 @@
     function Organization($rootScope, $scope, $timeout, API, State, DTOptionsBuilder, DTColumnDefBuilder) {
         var vm = this;
         vm.state = State;
-        vm.organization = angular.copy(State.organization);
-        vm.saving = false;
-        vm.save = save;
-
-        function save() {
-            vm.saving = true;
-            API.updateOrganization(vm.organization)
-                .then(function() {
-                    vm.saving = false;
-                    State.organization = vm.organization;
-                }, function() {
-                    vm.saving = false;
-                });
-        }
+        vm.organization = undefined;
 
         $scope.$watch(function() { return State.organization; }, function() {
             var previous = vm.organization;

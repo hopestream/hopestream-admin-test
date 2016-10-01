@@ -133,14 +133,16 @@
 
             <div class="modal-body">
                 <input type="text" class="form-control" data-ng-model="seriesFilter.name" data-ng-trim="true" placeholder="Search...">
-                <ul data-vs-repeat class="form-group" style="height:300px;overflow:auto;">
-                    <li data-ng-repeat="series in vm.state.series | filter: seriesFilter | orderBy: 'name'">
-                        <a data-ng-click="vm.setSeries(series)" data-dismiss="modal" style="display:block;padding-top:14px;padding-bottom:14px;border-bottom: 1px solid #EDEDED;">
-                            <img data-ng-src="{{series.thumbnailUrl}}" style="height:68px;width:120px;background-color:#EDEDED;margin-left:16px;margin-right:8px;"></img>
-                            <span>{{series.name}}</span>
-                        </a>
-                    </li>
-                </ul>
+                <div class="hs-modal-selection-list">
+                    <ul data-vs-repeat class="form-group">
+                        <li data-ng-repeat="series in vm.state.series | filter: seriesFilter | orderBy: 'name'">
+                            <a data-ng-click="vm.setSeries(series)" data-dismiss="modal">
+                                <img data-ng-src="{{series.thumbnailUrl}}"></img>
+                                <span>{{series.name}}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
             <div class="modal-footer">
@@ -163,18 +165,20 @@
             </div>
 
             <div class="modal-body">
-                <ul style="max-height:300px;overflow:auto;">
-                    <li>
-                        <a data-ng-click="vm.addFeedWithID(-1)" data-dismiss="modal" style="display:block;padding-top:14px;padding-bottom:14px;border-bottom: 1px solid #EDEDED;">
-                            <span>HopeStream Mobile App</span>
-                        </a>
-                    </li>
-                    <li data-ng-if="vm.media.status >= 0" data-ng-repeat="feed in vm.state.feeds | orderBy: 'name'">
-                        <a data-ng-click="vm.addFeedWithID(feed.id)" data-dismiss="modal" style="display:block;padding-top:14px;padding-bottom:14px;border-bottom: 1px solid #EDEDED;">
-                            <span>{{ feed.title }} - {{ feed.type === 0 ? 'Video Podcast' : 'Audio Podcast' }}</span>
-                        </a>
-                    </li>
-                </ul>
+                <div class="hs-modal-selection-list">
+                    <ul>
+                        <li>
+                            <a data-ng-click="vm.addFeedWithID(-1)" data-dismiss="modal">
+                                <span>HopeStream Mobile App</span>
+                            </a>
+                        </li>
+                        <li data-ng-if="vm.media.status >= 0" data-ng-repeat="feed in vm.state.feeds | orderBy: 'name'">
+                            <a data-ng-click="vm.addFeedWithID(feed.id)" data-dismiss="modal">
+                                <span>{{ feed.title }} - {{ feed.type === 0 ? 'Video Podcast' : 'Audio Podcast' }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
             <div class="modal-footer">
@@ -198,14 +202,16 @@
 
             <div class="modal-body">
                 <input type="text" class="form-control" data-ng-model="speakerFilter.name" data-ng-trim="true" placeholder="Search...">
-                <ul data-vs-repeat style="height:300px;overflow:auto;">
-                    <li data-ng-repeat="speaker in vm.state.speakers | filter: speakerFilter | orderBy: 'name'">
-                        <a data-ng-click="vm.addSpeaker(speaker)" data-dismiss="modal" style="display:block;padding-top:14px;padding-bottom:14px;border-bottom: 1px solid #EDEDED;">
-                            <img data-ng-src="{{speaker.thumbnailUrl}}" style="height:68px;width:120px;background-color:#EDEDED;margin-left:16px;margin-right:8px;"></img>
-                            <span>{{speaker.name}}</span>
-                        </a>
-                    </li>
-                </ul>
+                <div class="hs-modal-selection-list">
+                    <ul data-vs-repeat>
+                        <li data-ng-repeat="speaker in vm.state.speakers | filter: speakerFilter | orderBy: 'name'">
+                            <a data-ng-click="vm.addSpeaker(speaker)" data-dismiss="modal">
+                                <img data-ng-src="{{speaker.thumbnailUrl}}"></img>
+                                <span>{{speaker.name}}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
             <div class="modal-footer">
@@ -228,19 +234,19 @@
 
             <div class="modal-body clearfix">
                 <input type="text" class="form-control" data-ng-model="topicFilter.name" data-ng-trim="true" placeholder="Search...">
-                <div style="height:350px;overflow:auto;">
-                <div class="col-sm-4" data-ng-repeat="column in vm.topicColumns">
-                    <div class="col-sm-12" data-ng-repeat="category in column">
-                        <label>{{ category }}</label>
-                        <ul style="list-style-type:none;padding:0;margin:0;margin-bottom:10px;font-size:80%;">
-                            <li data-ng-repeat="topic in vm.state.topicsByCategory[category] | filter: topicFilter | orderBy: 'name'">
-                                <a data-ng-click="vm.addTopic(topic)" data-dismiss="modal" style="display:block;padding-top:7px;padding-bottom:7px;border-bottom: 1px solid #EDEDED;">
-                                    <span>{{ topic.name }}</span>
-                                </a>
-                            </li>
-                        </ul>
+                <div class="hs-modal-selection-list hs-topic-selection-list">
+                    <div class="col-sm-4" data-ng-repeat="column in vm.topicColumns">
+                        <div class="col-sm-12" data-ng-repeat="category in column">
+                            <label>{{ category }}</label>
+                            <ul>
+                                <li data-ng-repeat="topic in vm.state.topicsByCategory[category] | filter: topicFilter | orderBy: 'name'">
+                                    <a data-ng-click="vm.addTopic(topic)" data-dismiss="modal">
+                                        <span>{{ topic.name }}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
                 </div>
             </div>
 
