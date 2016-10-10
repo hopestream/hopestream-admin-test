@@ -8,8 +8,8 @@
     Session.$inject = ['$http', 'Upload'];
 
     function Session($http, Upload) {
-        var API_URL = 'http://localhost:3000/';
-        var OAUTH_CLIENT_BASE_64 = btoa('hopestream-ios:jquo64ym8hvje2pxepto9');
+        var API_URL = 'https://apitest.hopestream.com/';
+        var OAUTH_CLIENT_BASE_64 = btoa('hopestream-admin:f085c37a-5d21-4eb4-8b73-355c11d2e60d');
 
         var getAccessToken = function() { return Lockr.get('Session.access-token'); }
         var setAccessToken = function(accessToken) { Lockr.set('Session.access-token', accessToken); }
