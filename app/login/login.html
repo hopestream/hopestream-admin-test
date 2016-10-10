@@ -1,0 +1,45 @@
+<div class="container">
+    <section class="hs-content-section hs-sign-in-section" data-ng-hide="vm.loading">
+        <h2>Sign In</h2>
+        <p class="lead">Upload and manage your media.</p>
+
+        <section class="hs-form">
+            <form name="form" data-ng-submit="vm.login()" novalidate>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="alert alert-warning" data-ng-show="vm.error" role="alert">
+                            <strong>Whoops.</strong> {{ vm.error }}.
+                        </div>
+
+                        <div class="form-group" data-ng-class="{ 'has-error': form.email.$invalid && form.email.$touched }">
+                            <label for="email">E-mail Address</label>
+                            <input type="email" id="email" class="form-control" name="email" data-ng-model="vm.email" data-ng-trim="true" placeholder="Enter your e-mail address" required>
+
+                            <p class="help-block" data-ng-show="form.email.$invalid && form.email.$touched">
+                                Please enter a valid e-mail address.
+                            </p>
+                        </div>
+
+                        <div class="form-group" data-ng-class="{ 'has-error' : form.password.$invalid && form.password.$touched }">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" class="form-control" name="password" data-ng-model="vm.password" data-ng-trim="true" placeholder="Enter a password" required>
+
+                            <p class="help-block" data-ng-show="form.password.$invalid && form.password.$touched">
+                                Please enter a password.
+                            </p>
+                        </div>
+
+                        <button class="btn btn-primary hs-sign-in-button" data-ng-disabled="form.$invalid" type="submit">Sign In</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </section>
+
+    <section class="hs-loading-view" data-ng-show="vm.loading">
+        <h1>Signing In</h1>
+        <p class="lead">Please wait one moment.</p>
+
+        <span id="spinner" us-spinner></span>
+    </section>
+</div>

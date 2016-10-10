@@ -1,0 +1,49 @@
+<div class="container" data-ng-if="vm.state.series">
+    <button class="btn btn-primary pull-right hs-add-button" data-ng-click="vm.addSeries()">Add Series</button>
+
+    <h1>Series</h1>
+
+    <div class="table-responsive hs-table">
+        <table id="series-list" class="display table table-bordered table-striped"
+            data-datatable="ng"
+            data-dt-options="vm.dtOptions"
+            data-dt-column-defs="vm.dtColumnDefs"
+            cellspacing="0"
+            width="100%">
+
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                </tr>
+            </thead>
+
+            <tfoot>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                </tr>
+            </tfoot>
+
+            <tbody>
+                <tr data-ng-repeat="series in vm.state.series">
+                    <td>
+                        <img data-ng-src="{{series.thumbnailUrl}}" style="height:68px;width:120px;background-color:#EDEDED;margin-left:16px;margin-right:8px;"></img>
+                    </td>
+
+                    <td>
+                        <a data-ui-sref="series({ id: series.id })">{{ series.name ? series.name : "Untitled" }}</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="container" data-ng-if="!vm.state.series">
+    <section class="hs-loading-view">
+        <h1>Loading Series</h1>
+        <p class="lead">Please wait one moment.</p>
+        <span id="spinner" us-spinner></span>
+    </section>
+</div>

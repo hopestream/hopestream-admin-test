@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" data-ng-app="app" data-ng-strict-di>
+<head>
+    <title>HopeStream Admin</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="HopeStream">
+    <meta name="author" content="HopeStream">
+
+    <link rel="icon" href="static/img/favicon.ico">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="vendor/angular-bootstrap/ui-bootstrap-csp.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/s/bs/dt-1.10.10,b-colvis-1.1.0,r-2.0.0/datatables.min.css"/>
+    <link rel="stylesheet" href="vendor/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css">
+    <link rel="stylesheet" href="vendor/nvd3/build/nv.d3.min.css">
+    <link rel="stylesheet" href="static/css/ie10-viewport-bug-workaround.css">
+    <link rel="stylesheet" href="static/css/hopestream.min.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div ui-view="navbar"></div>
+    <div ui-view="content"></div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/s/bs/dt-1.10.10,b-colvis-1.1.0,r-2.0.0/datatables.min.js"></script>
+    <script src="http://content.jwplatform.com/libraries/ErNubzJ3.js"></script>
+    <script src="static/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="static/js/uploadProgress.js"></script>
+    <script src="vendor/angular/angular.min.js"></script>
+    <script src="vendor/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="vendor/angular-clipboard/angular-clipboard.js"></script>
+    <script src="vendor/angular-datatables/dist/angular-datatables.min.js"></script>
+    <script src="vendor/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.min.js"></script>
+    <script src="vendor/spin.js/spin.min.js"></script>
+    <script src="vendor/angular-spinner/angular-spinner.min.js"></script>
+    <script src="vendor/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="vendor/angular-vs-repeat/src/angular-vs-repeat.min.js"></script>
+    <script src="vendor/bootstrap-ui-datetime-picker/dist/datetime-picker.min.js"></script>
+    <script src="vendor/hashids/lib/hashids.min.js"></script>
+    <script src="vendor/ng-file-upload-shim/ng-file-upload-shim.min.js"></script>
+    <script src="vendor/ng-file-upload/ng-file-upload.min.js"></script>
+    <script src="vendor/d3/d3.min.js"></script>
+    <script src="vendor/nvd3/build/nv.d3.min.js"></script>
+    <script src="vendor/angular-nvd3/dist/angular-nvd3.min.js"></script>
+    <script src="vendor/lockr/lockr.min.js"></script>
+    <script src="vendor/toastr/toastr.min.js"></script>
+
+    <!-- models -->
+    <script src="static/js/hopestream/models/feed.js"></script>
+    <script src="static/js/hopestream/models/user.js"></script>
+    <script src="static/js/hopestream/models/topic.js"></script>
+    <script src="static/js/hopestream/models/organization.js"></script>
+    <script src="static/js/hopestream/models/speaker.js"></script>
+    <script src="static/js/hopestream/models/series.js"></script>
+    <script src="static/js/hopestream/models/media.js"></script>
+    <script src="static/js/hopestream/models/api-response.js"></script>
+    <script src="static/js/hopestream/async-processor.js"></script>
+    <script src="static/js/hopestream/async-data-source.js"></script>
+    <script src="static/js/hopestream/constants.js"></script>
+    <script src="static/js/hopestream/nvd3-configuration.js"></script>
+
+    <!-- app module -->
+    <script src="app/app.module.js"></script>
+
+    <!-- core module -->
+    <script src="app/core/core.module.js"></script>
+    <script src="app/core/api.service.js"></script>
+    <script src="app/core/config-router.js"></script>
+    <script src="app/core/config-spinner.js"></script>
+    <script src="app/core/config-toastr.js"></script>
+    <script src="app/core/constants.js"></script>
+    <script src="app/core/file-size.filter.js"></script>
+    <script src="app/core/hash.service.js"></script>
+    <script src="app/core/image-upload.directive.js"></script>
+    <script src="app/core/session.service.js"></script>
+    <script src="app/core/state.service.js"></script>
+
+    <!-- feeds module -->
+    <script src="app/feeds/feeds.module.js"></script>
+    <script src="app/feeds/feed.js"></script>
+    <script src="app/feeds/feed-display-name.filter.js"></script>
+    <script src="app/feeds/feed-form.directive.js"></script>
+    <script src="app/feeds/feed-list.js"></script>
+    <script src="app/feeds/feed-type.filter.js"></script>
+
+    <!-- login module -->
+    <script src="app/login/login.module.js"></script>
+    <script src="app/login/login.js"></script>
+
+    <!-- media module -->
+    <script src="app/media/media.module.js"></script>
+    <script src="app/media/media.js"></script>
+    <script src="app/media/media-display-name.filter.js"></script>
+    <script src="app/media/media-form.directive.js"></script>
+    <script src="app/media/media-image.directive.js"></script>
+    <script src="app/media/media-list.js"></script>
+    <script src="app/media/media-player.directive.js"></script>
+    <script src="app/media/media-replace.directive.js"></script>
+    <script src="app/media/media-status.directive.js"></script>
+    <script src="app/media/media-status-description.filter.js"></script>
+    <script src="app/media/media-upload.directive.js"></script>
+    <script src="app/media/media-url-form.directive.js"></script>
+    <script src="app/media/video-player.directive.js"></script>
+
+    <!-- navbar module -->
+    <script src="app/navbar/navbar.module.js"></script>
+    <script src="app/navbar/navbar.js"></script>
+
+    <!-- organization module -->
+    <script src="app/organization/organization.module.js"></script>
+    <script src="app/organization/organization.js"></script>
+    <script src="app/organization/organization-form.directive.js"></script>
+
+    <!-- series module -->
+    <script src="app/series/series.module.js"></script>
+    <script src="app/series/series.js"></script>
+    <script src="app/series/series-form.directive.js"></script>
+    <script src="app/series/series-list.js"></script>
+
+    <!-- speakers module -->
+    <script src="app/speakers/speakers.module.js"></script>
+    <script src="app/speakers/speaker.js"></script>
+    <script src="app/speakers/speaker-form.directive.js"></script>
+    <script src="app/speakers/speaker-list.js"></script>
+
+    <!-- upload module -->
+    <script src="app/upload/upload.module.js"></script>
+    <script src="app/upload/upload.js"></script>
+</body>
+</html>

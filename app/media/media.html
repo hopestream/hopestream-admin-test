@@ -1,0 +1,457 @@
+<div class="container" data-ng-if="vm.media">
+    <p><a data-ui-sref="media-list"><i class="fa fa-angle-left"></i> &nbsp;Back to Media List</a></p>
+
+    <h1>{{ vm.media | mediaDisplayName }}</h1>
+
+    <p class="hs-page-subheading">
+        <span data-ng-if="vm.media.date">{{ vm.media.date | date: 'EEEE MMM d, yyyy' }}</span>
+        <span data-ng-if="vm.media.date">{{ vm.media.date | date: 'h:mm a' }}</span>
+    </p>
+
+    <section class="hs-media-status">
+        <hs-media-status status="{{ vm.media.status }}"></hs-media-status>
+        <span class="hs-media-status-description">{{ vm.media.status | mediaStatusDescription }}</span>
+    </section>
+
+    <div class="hs-expand-collapse-all-buttons">
+        <button class="btn btn-collapsible" data-ng-click="
+            vm.isDetailsSectionCollapsed   = false;
+            vm.isImageSectionCollapsed     = false;
+            vm.isVideoSectionCollapsed     = false;
+            vm.isAudioSectionCollapsed     = false;
+            vm.isPlaysSectionCollapsed     = false;
+            vm.isBandwidthSectionCollapsed = false;
+            vm.isUsageSectionCollapsed     = false;
+            vm.isAdvancedSectionCollapsed  = false;">
+            <i class="fa fa-2x fa-angle-down"></i>
+        </button>
+
+        <button class="btn btn-collapsible" data-ng-click="
+            vm.isDetailsSectionCollapsed   = true;
+            vm.isImageSectionCollapsed     = true;
+            vm.isVideoSectionCollapsed     = true;
+            vm.isAudioSectionCollapsed     = true;
+            vm.isPlaysSectionCollapsed     = true;
+            vm.isBandwidthSectionCollapsed = true;
+            vm.isUsageSectionCollapsed     = true;
+            vm.isAdvancedSectionCollapsed  = true;">
+            <i class="fa fa-2x fa-angle-up"></i>
+        </button>
+    </div>
+
+
+    <!-- FORM -->
+    <section class="hs-content-section">
+        <button type="button" class="btn btn-collapsible pull-right hs-collapse-toggle" data-ng-click="vm.isDetailsSectionCollapsed = !vm.isDetailsSectionCollapsed">
+            <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isDetailsSectionCollapsed"></i>
+            <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isDetailsSectionCollapsed"></i>
+        </button>
+
+        <h2>Details</h2>
+
+        <div data-uib-collapse="vm.isDetailsSectionCollapsed">
+            <hs-media-form media-id="{{ vm.id }}"></hs-media-form>
+        </div>
+    </section>
+
+
+    <!-- IMAGE -->
+    <section class="hs-content-section">
+        <button type="button" class="btn btn-collapsible pull-right hs-collapse-toggle" data-ng-click="vm.isImageSectionCollapsed = !vm.isImageSectionCollapsed">
+            <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isImageSectionCollapsed"></i>
+            <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isImageSectionCollapsed"></i>
+        </button>
+
+        <h2>Image</h2>
+
+        <div data-uib-collapse="vm.isImageSectionCollapsed">
+            <div class="row">
+                <div class="col-sm-4 hs-media-image-section-instructions">
+                    <p>Upload an image for this media.</p>
+                    <p>Image must be in <strong>.jpg</strong> format.</p>
+
+                    <hs-image-upload media-id="{{ vm.id }}"></hs-image-upload>
+                </div>
+
+                <div class="col-sm-8 hs-media-image-section-preview" data-ng-if="vm.shouldShowImage">
+                    <img class="img-responsive" alt="Poster Image" data-ng-src="{{ vm.imageUrl }}" data-hs-media-image>
+                </div>
+            </div>
+
+            <div class="row">
+                <div data-ng-if="vm.state.organization.imageUrl || vm.series.imageUrl">
+                    <div class="col-xs-12 hs-media-image-section-instructions">
+                        <p><strong>or choose one:</strong></p>
+                    </div>
+
+                    <div class="col-sm-4 col-xs-6 hs-media-image-section-selection" data-ng-if="vm.series.imageUrl">
+                        <p>Series Image</p>
+                        <img class="img-responsive" data-ng-src="{{ vm.series.imageUrl }}"></img>
+                        <button class="btn btn-default hs-media-image-select-button" data-ng-click="vm.setMediaImageToSeries()">Select</button>
+                    </div>
+
+                    <div class="col-sm-4 col-xs-6 hs-media-image-section-selection" data-ng-if="vm.state.organization.imageUrl">
+                        <p>Church Image</p>
+                        <img class="img-responsive" data-ng-src="{{ vm.state.organization.imageUrl }}"></img>
+                        <button class="btn btn-default hs-media-image-select-button" data-ng-click="vm.setMediaImageToOrganization()">Select</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- URLs -->
+    <section class="hs-content-section" data-ng-if="vm.media.status < 0">
+        <button type="button" class="btn btn-collapsible pull-right hs-collapse-toggle" data-ng-click="vm.isVideoSectionCollapsed = !vm.isVideoSectionCollapsed">
+            <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isVideoSectionCollapsed"></i>
+            <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isVideoSectionCollapsed"></i>
+        </button>
+
+        <h2>Video</h2>
+
+        <div data-uib-collapse="vm.isVideoSectionCollapsed">
+            <hs-media-url-form media-id="{{ vm.id }}"></hs-media-url-form>
+        </div>
+    </section>
+
+
+    <!-- VIDEO -->
+    <section class="hs-content-section" data-ng-if="vm.media.type === 0 && vm.media.status >= 0">
+        <button type="button" class="btn btn-collapsible pull-right hs-collapse-toggle" data-ng-click="vm.isVideoSectionCollapsed = !vm.isVideoSectionCollapsed">
+            <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isVideoSectionCollapsed"></i>
+            <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isVideoSectionCollapsed"></i>
+        </button>
+
+        <h2>Video</h2>
+
+        <section data-uib-collapse="vm.isVideoSectionCollapsed">
+
+            <!-- If status: Error -->
+            <div class="hs-video-player-placeholder" data-ng-if="vm.media.status === 4">
+                <h3>Video preview not available</h3>
+                <p>Please upload your media content again.</p>
+            </div>
+
+            <!-- If status: Uploading -->
+            <div class="hs-video-player-placeholder" data-ng-if="vm.media.status === 0">
+                <h3>Video preview not available</h3>
+                <p>Your media is currently uploading.</p>
+            </div>
+
+            <!-- If status: Uploaded or Processing -->
+            <div class="hs-video-player-placeholder" data-ng-if="vm.media.status === 1 || vm.media.status === 2">
+                <h3>Video preview coming soon</h3>
+                <p>Preview will be available once your media is finished processing.</p>
+            </div>
+
+            <!-- If status: Available -->
+            <div class="hs-video-player" data-ng-if="vm.media.status === 3">
+                <hs-video-player url="{{ vm.videoPlayerUrl }}"></hs-video-player>
+            </div>
+
+            <h3>URLs</h3>
+
+            <div class="hs-media-url" data-ng-repeat="url in vm.videoURLs">
+                <label>{{ url.label }}</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" value="{{ url.url }}" readonly>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default hs-copy-url-button" data-clipboard data-text="url.url"
+                            data-on-copied="vm.copyToClipboardSuccess()"
+                            data-on-error="vm.copyToClipboardError(error)">
+
+                            <i class="fa fa-clipboard"></i>&nbsp; Copy
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </section>
+    </section>
+
+
+    <!-- AUDIO -->
+    <section class="hs-content-section" data-ng-if="vm.media.status >= 0">
+        <button type="button" class="btn btn-collapsible pull-right hs-collapse-toggle" data-ng-click="vm.isAudioSectionCollapsed = !vm.isAudioSectionCollapsed">
+            <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isAudioSectionCollapsed"></i>
+            <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isAudioSectionCollapsed"></i>
+        </button>
+
+        <h2>Audio</h2>
+
+        <div data-uib-collapse="vm.isAudioSectionCollapsed">
+
+            <!-- If status: Error -->
+            <div class="hs-audio-player-placeholder" data-ng-if="vm.media.status === 4">
+                <h3>Audio preview not available</h3>
+                <p>Please upload your media content again.</p>
+            </div>
+
+            <!-- If status: Uploading -->
+            <div class="hs-audio-player-placeholder" data-ng-if="vm.media.status === 0">
+                <h3>Audio preview not available</h3>
+                <p>Your media is currently uploading.</p>
+            </div>
+
+            <!-- If status: Uploaded or Processing -->
+            <div class="hs-audio-player-placeholder" data-ng-if="vm.media.status === 1 || vm.media.status === 2">
+                <h3>Audio preview coming soon</h3>
+                <p>Preview will be available once your media is finished processing.</p>
+            </div>
+
+            <div class="hs-audio-player" data-ng-if="vm.media.status === 3">
+                <hs-media-player setup="vm.audioPlayerOptions" data-ng-if="vm.audioPlayerOptions"></hs-media-player>
+            </div>
+
+            <h3>URLs</h3>
+
+            <div class="hs-media-url" data-ng-repeat="url in vm.audioURLs">
+                <label>{{ url.label }}</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" value="{{ url.url }}" readonly>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default hs-copy-url-button" data-clipboard data-text="url.url"
+                            data-on-copied="vm.copyToClipboardSuccess()"
+                            data-on-error="vm.copyToClipboardError(error)">
+
+                            <i class="fa fa-clipboard"></i>&nbsp; Copy
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- PLAY COUNTS -->
+    <section class="hs-content-section" data-ng-if="vm.media.status === 3">
+        <button type="button" class="btn btn-collapsible pull-right hs-collapse-toggle" data-ng-click="vm.isPlaysSectionCollapsed = !vm.isPlaysSectionCollapsed">
+            <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isPlaysSectionCollapsed"></i>
+            <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isPlaysSectionCollapsed"></i>
+        </button>
+
+        <h2>Plays</h2>
+
+        <div data-uib-collapse="vm.isPlaysSectionCollapsed">
+            <nvd3 options="vm.playcountChartOptions" data="vm.playcountData"></nvd3>
+            <div class="hs-chart-instructions">
+                <h3>Instructions</h3>
+                <ul>
+                    <li>Hover over the chart to view audio, video, and HLS play counts for each date.</li>
+                    <li>In the top-right corner, click the legend items to toggle lines on/off.</li>
+                    <li>Click and drag in the timeline (smaller bottom graph) to adjust what is shown in the main graph.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- BANDWIDTH -->
+    <section class="hs-content-section" data-ng-if="vm.media.status === 3">
+        <button type="button" class="btn btn-collapsible pull-right hs-collapse-toggle" data-ng-click="vm.isBandwidthSectionCollapsed = !vm.isBandwidthSectionCollapsed">
+            <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isBandwidthSectionCollapsed"></i>
+            <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isBandwidthSectionCollapsed"></i>
+        </button>
+
+        <h2>Bandwidth</h2>
+
+        <div data-uib-collapse="vm.isBandwidthSectionCollapsed">
+            <nvd3 options="vm.bandwidthChartOptions" data="vm.bandwidthData"></nvd3>
+            <div class="hs-chart-instructions">
+                <h3>Instructions</h3>
+                <ul>
+                    <li>Hover over the chart to view bandwidth (gigabytes) for each date.</li>
+                    <li>Click and drag in the timeline (smaller bottom graph) to adjust what is shown in the main graph.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- USAGE DATA -->
+    <section class="hs-content-section" data-ng-if="vm.media.status === 3">
+        <button type="button" class="btn btn-collapsible pull-right hs-collapse-toggle" data-ng-click="vm.isUsageSectionCollapsed = !vm.isUsageSectionCollapsed">
+            <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isUsageSectionCollapsed"></i>
+            <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isUsageSectionCollapsed"></i>
+        </button>
+
+        <h2>Usage Data</h2>
+
+        <div id="media-usage-section" data-uib-collapse="vm.isUsageSectionCollapsed">
+            <div class="row" data-ng-if="vm.isUsageLoading">
+                <div class="col-sm-12"><p class="hs-form-loading-view">Loading Usage...</p></div>
+            </div>
+
+            <div class="row" data-ng-if="!vm.isUsageLoading">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-12"><h3>Totals</h3></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-3 hs-media-usage-total-item">
+                            Bandwidth <span>{{ vm.usageTotals.bandwidth | fileSize }}</span>
+                        </div>
+                        <div class="col-sm-3 hs-media-usage-total-item">
+                            Audio Plays <span>{{ vm.usageTotals.playcountAudio | number }}</span>
+                        </div>
+                        <div class="col-sm-3 hs-media-usage-total-item">
+                            Video Plays <span>{{ vm.usageTotals.playcountVideo | number }}</span>
+                        </div>
+                        <div class="col-sm-3 hs-media-usage-total-item">
+                            HLS Plays <span>{{ vm.usageTotals.playcountHLS | number }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="table-responsive hs-table col-sm-12">
+                    <table id="usage-list" class="display table table-bordered table-striped" data-datatable="ng" data-dt-options="vm.dtOptions" data-dt-column-defs="vm.dtColumnDefs" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>UTC Timestamp</th>
+                                <th>Bandwidth</th>
+                                <th>Bandwidth Bytes</th>
+                                <th>Audio Plays</th>
+                                <th>Video Plays</th>
+                                <th>HLS Plays</th>
+                            </tr>
+                        </thead>
+
+                        <tfoot>
+                            <tr>
+                                <th>Date</th>
+                                <th>UTC Timestamp</th>
+                                <th>Bandwidth</th>
+                                <th>Bandwidth Bytes</th>
+                                <th>Audio Plays</th>
+                                <th>Video Plays</th>
+                                <th>HLS Plays</th>
+                            </tr>
+                        </tfoot>
+
+                        <tbody>
+                            <tr data-ng-repeat="usage in vm.usageData">
+                                <td>{{ usage.date | date : 'MMM&nbsp;d,&nbsp;yyyy - EEEE' : '-0000' }}</td>
+                                <td>{{ usage.date }}</td>
+                                <td>{{ usage[1] | fileSize }}</td>
+                                <td>{{ usage[1] }}</td>
+                                <td>{{ usage[2] | number }}</td>
+                                <td>{{ usage[3] | number }}</td>
+                                <td>{{ usage[4] | number }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ADVANCED -->
+    <section class="hs-content-section">
+        <button type="button" class="btn btn-collapsible pull-right hs-collapse-toggle" data-ng-click="vm.isAdvancedSectionCollapsed = !vm.isAdvancedSectionCollapsed">
+            <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isAdvancedSectionCollapsed"></i>
+            <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isAdvancedSectionCollapsed"></i>
+        </button>
+
+        <h2>Advanced</h2>
+
+        <div class="row" id="media-advanced-section" data-uib-collapse="vm.isAdvancedSectionCollapsed">
+            <div class="col-sm-6 hs-advanced-section-item" data-ng-if="vm.media.status >= 0">
+                <h3>Replace Media</h3>
+
+                <p>Upload a new version of this media.  This will replace the content
+                    but keep the same unique URLs for the video and audio files.</p>
+
+                <p><strong>NOTE:</strong> Uploaded media will need to be processed
+                    before it is available for streaming and download.</p>
+
+                <button class="btn btn-default" data-toggle="modal" data-target="#replace-media-modal">
+                    <i class="fa fa-cloud-upload"></i> &nbsp;Replace Media
+                </button>
+            </div>
+
+            <div class="col-sm-6 hs-advanced-section-item">
+                <h3>Delete Media</h3>
+
+                <p>Permanently delete this media including all video and audio files.</p>
+
+                <p><strong>NOTE:</strong> This will delete the media record and remove it from all feeds.
+                    Video and audio files will be deleted within 24 hours.</p>
+
+                <button class="btn btn-danger-inverse" data-toggle="modal" data-target="#delete-media-modal">
+                    <i class="fa fa-trash"></i> &nbsp;Delete Media
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <p><a data-ui-sref="media-list"><i class="fa fa-angle-left"></i> &nbsp;Back to Media List</a></p>
+</div>
+
+<div class="container" data-ng-if="!vm.media">
+    <section class="hs-loading-view">
+        <h1>Loading Details</h1>
+        <p class="lead">Please wait one moment.</p>
+        <span id="spinner" us-spinner></span>
+    </section>
+</div>
+
+
+<!-- Modal for Replace Media -->
+<div id="replace-media-modal" class="modal fade" data-ng-if="vm.media" role="dialog" aria-labelledby="replace-media-modal-label" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="replace-media-modal-label">Replace Media</h4>
+            </div>
+
+            <div class="modal-body">
+                <p>Upload a new version of this media.  This will replace the content
+                    but keep the same unique URLs for the video and audio files.</p>
+
+                <p><strong>NOTE:</strong> Uploaded media will need to be processed
+                    before it is available for streaming and download.</p>
+
+                <hs-media-replace media-id="{{ vm.id }}"></hs-media-replace>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Delete Media -->
+<div id="delete-media-modal" class="modal fade" data-ng-if="vm.media" role="dialog" aria-labelledby="delete-media-modal-label" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="delete-media-modal-label">Delete Media</h4>
+            </div>
+
+            <div class="modal-body">
+                <p>Permanently delete "<strong>{{ vm.media | mediaDisplayName }}</strong>?"</p>
+                <p><strong>NOTE:</strong> This will delete the media record and remove it from all feeds.</p>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">
+                    Cancel
+                </button>
+
+                <button class="btn btn-danger" data-dismiss="modal" data-ng-click="vm.deleteMedia()">
+                    <i class="fa fa-trash"></i>&nbsp; Delete Media
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

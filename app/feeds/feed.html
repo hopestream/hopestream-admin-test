@@ -1,0 +1,206 @@
+<div class="container" data-ng-if="vm.feed && vm.state.mediaByID">
+    <p><a data-ui-sref="feed-list"><i class="fa fa-angle-left"></i> &nbsp;Back to Feeds List</a></p>
+
+    <h1>{{ vm.feed | feedDisplayName }}</h1>
+
+    <p class="hs-page-subheading">
+        {{ vm.feed.subtitle }}
+    </p>
+
+    <div class="hs-expand-collapse-all-buttons">
+        <button class="btn btn-collapsible" data-ng-click="
+            vm.isDetailsSectionCollapsed   = false;
+            vm.isImageSectionCollapsed     = false;
+            vm.isMediaListSectionCollapsed = false;
+            vm.isAdvancedSectionCollapsed  = false;">
+            <i class="fa fa-2x fa-angle-down"></i>
+        </button>
+
+        <button class="btn btn-collapsible" data-ng-click="
+            vm.isDetailsSectionCollapsed   = true;
+            vm.isImageSectionCollapsed     = true;
+            vm.isMediaListSectionCollapsed = true;
+            vm.isAdvancedSectionCollapsed  = true;">
+            <i class="fa fa-2x fa-angle-up"></i>
+        </button>
+    </div>
+
+    <!-- FORM -->
+    <section class="hs-content-section">
+        <button type="button" class="btn btn-collapsible pull-right hs-collapse-toggle" data-ng-click="vm.isDetailsSectionCollapsed = !vm.isDetailsSectionCollapsed">
+            <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isDetailsSectionCollapsed"></i>
+            <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isDetailsSectionCollapsed"></i>
+        </button>
+
+        <h2>Details</h2>
+
+        <section id="feed-details-section" class="hs-form" data-uib-collapse="vm.isDetailsSectionCollapsed">
+            <hs-feed-form feed-id="{{ vm.id }}"></hs-feed-form>
+        </section>
+    </section>
+
+    <!-- IMAGE -->
+    <section class="hs-content-section">
+        <button type="button" class="btn btn-collapsible pull-right hs-collapse-toggle" data-ng-click="vm.isImageSectionCollapsed = !vm.isImageSectionCollapsed">
+            <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isImageSectionCollapsed"></i>
+            <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isImageSectionCollapsed"></i>
+        </button>
+
+        <h2>Image</h2>
+
+        <div class="row" data-uib-collapse="vm.isImageSectionCollapsed">
+            <div class="col-sm-4 hs-media-image-section-instructions">
+                <p>Upload an image for this feed.</p>
+                <p>Image must be in <strong>.jpg</strong> format.</p>
+
+                <hs-image-upload feed-id="{{ vm.id }}"></hs-image-upload>
+            </div>
+
+            <div class="col-sm-8 hs-media-image-section-preview" data-ng-if="vm.shouldShowImage">
+                <img class="img-responsive" alt="Poster Image" data-ng-src="{{ vm.imageUrl }}" data-hs-media-image>
+            </div>
+        </div>
+    </section>
+
+    <!-- MEDIA LIST -->
+    <section class="hs-content-section">
+        <button type="button" class="btn btn-collapsible pull-right hs-collapse-toggle" data-ng-click="vm.isMediaListSectionCollapsed = !vm.isMediaListSectionCollapsed">
+            <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isMediaListSectionCollapsed"></i>
+            <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isMediaListSectionCollapsed"></i>
+        </button>
+
+        <h2>Media List</h2>
+
+        <section id="feed-media-section" data-uib-collapse="vm.isMediaListSectionCollapsed">
+            <div class="row">
+                <div class="col-sm-12">
+                    <p class="lead">Media entries included in this feed</p>
+
+                    <div class="table-responsive hs-table">
+                        <table id="media-list" class="display table table-bordered table-striped"
+                            data-datatable="ng"
+                            data-dt-options="vm.dtOptions"
+                            data-dt-column-defs="vm.dtColumnDefs"
+                            cellspacing="0"
+                            width="100%">
+
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>UTC Timestamp</th>
+                                    <th>Title</th>
+                                    <th>Speaker</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tfoot>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>UTC Timestamp</th>
+                                    <th>Title</th>
+                                    <th>Speaker</th>
+                                    <th>Status</th>
+                                </tr>
+                            </tfoot>
+
+                            <tbody>
+                                <tr data-ng-repeat="mediaId in vm.feed.mediaIds" data-ng-init="media = vm.state.mediaByID[mediaId]">
+                                    <td>
+                                        {{ media.date | date: 'MMM d, yyyy' }}
+                                        <small>{{ media.date | date: 'EEEE h:mm a' }}</small>
+                                    </td>
+
+                                    <td>{{ media.date }}</td>
+
+                                    <td>
+                                        <div>
+                                            <a data-ui-sref="media({ id: media.id })">{{ media.name ? media.name : 'Untitled' }}</a>
+                                        </div>
+                                        <div data-ng-if="media.seriesId && vm.state.seriesByID[media.seriesId]" data-ng-init="series = vm.state.seriesByID[media.seriesId]">
+                                            {{ series.name ? series.name : 'Untitled' }}
+                                        </div>
+                                    </td>
+
+                                    <td data-ng-if="media.speakerIds.length > 0">
+                                        <div data-ng-repeat="speakerId in media.speakerIds" data-ng-init="speaker = vm.state.speakersByID[speakerId]">
+                                            {{ speaker.name ? speaker.name : 'Untitled' }}
+                                        </div>
+                                    </td>
+                                    <td data-ng-if="media.speakerIds.length == 0">
+                                        <div>--</div>
+                                    </td>
+
+                                    <td>
+                                        <hs-media-status status="{{ media.status }}"></hs-media-status>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <!-- ADVANCED -->
+    <section class="hs-content-section">
+        <button type="button" class="btn btn-collapsible pull-right hs-collapse-toggle" data-ng-click="vm.isAdvancedSectionCollapsed = !vm.isAdvancedSectionCollapsed">
+            <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isAdvancedSectionCollapsed"></i>
+            <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isAdvancedSectionCollapsed"></i>
+        </button>
+
+        <h2>Advanced</h2>
+
+        <div class="row" id="feed-advanced-section" data-uib-collapse="vm.isAdvancedSectionCollapsed">
+            <div class="col-sm-6 hs-advanced-section-item">
+                <h3>Delete Feed</h3>
+                <p>Permanently delete this feed.</p>
+
+                <p><strong>NOTE:</strong> This will not delete any media entries that are included in this feed. This will
+                    simply delete the feed, and those media records will no longer be associated with this feed.</p>
+
+                <button class="btn btn-danger-inverse" data-toggle="modal" data-target="#delete-feed-modal">
+                    <i class="fa fa-trash"></i> &nbsp;Delete Feed
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <p><a data-ui-sref="feed-list"><i class="fa fa-angle-left"></i> &nbsp;Back to Feeds List</a></p>
+</div>
+
+<!-- Modal for Delete Feed -->
+<div id="delete-feed-modal" class="modal fade" data-ng-if="vm.feed && vm.state.mediaByID" role="dialog" aria-labelledby="delete-feed-modal-label" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="delete-feed-modal-label">Delete Feed</h4>
+            </div>
+
+            <div class="modal-body">
+                <p>Permanently delete "<strong>{{ vm.feed | feedDisplayName }}</strong>?"</p>
+
+                <p><strong>NOTE:</strong> This will not delete any media entries that are included in this feed. This will
+                    simply delete the feed, and those media records will no longer be associated with this feed.</p>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+                <button class="btn btn-danger" data-dismiss="modal" data-ng-click="vm.deleteFeed()">
+                    <i class="fa fa-trash"></i>&nbsp; Delete Feed
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" data-ng-if="!vm.feed || !vm.state.mediaByID">
+    <section class="hs-loading-view">
+        <h1>Loading Details</h1>
+        <p class="lead">Please wait one moment.</p>
+        <span id="spinner" us-spinner></span>
+    </section>
+</div>

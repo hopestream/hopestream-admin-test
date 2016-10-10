@@ -1,0 +1,72 @@
+<section class="hs-upload-item hs-content-section">
+    <div class="row">
+        <div class="col-sm-9 hs-upload-item-filename"><h2>{{ vm.file.name }}</h2></div>
+        <div class="col-sm-3 hs-upload-item-cancel-btn" data-ng-show="vm.status === vm.UPLOAD_STATUS_UPLOADING">
+            <button class="btn btn-danger-inverse" data-ng-click="vm.cancelUpload()">Cancel</button>
+        </div>
+        <div class="col-sm-3 hs-upload-item-cancel-btn" data-ng-show="vm.status === vm.UPLOAD_STATUS_COMPLETE || vm.status === vm.UPLOAD_STATUS_ERROR">
+            <button class="btn btn-default" data-ng-click="vm.clearUpload()">Clear</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 hs-upload-item-progress-bar">
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped active"
+                     role="progressbar"
+                     data-ng-if="vm.status === vm.UPLOAD_STATUS_UPLOADING"
+                     aria-valuenow="{{ vm.progress }}"
+                     aria-valuemin="0"
+                     aria-valuemax="100"
+                     style="width: {{ vm.progress }}%">
+
+                    <span class="sr-only">{{ vm.progress }}% Complete</span>
+                </div>
+
+                <div class="progress-bar progress-bar-success"
+                     role="progressbar"
+                     data-ng-if="vm.status === vm.UPLOAD_STATUS_COMPLETE"
+                     aria-valuenow="{{ vm.progress }}"
+                     aria-valuemin="0"
+                     aria-valuemax="100"
+                     style="width: {{ vm.progress }}%">
+
+                    <span class="sr-only">{{ vm.progress }}% Complete</span>
+                </div>
+
+                <div class="progress-bar progress-bar-danger"
+                     role="progressbar"
+                     data-ng-if="vm.status === vm.UPLOAD_STATUS_ERROR"
+                     aria-valuenow="{{ vm.progress }}"
+                     aria-valuemin="0"
+                     aria-valuemax="100"
+                     style="width: {{ vm.progress }}%">
+
+                    <span class="sr-only">{{ vm.progress }}% Complete</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 hs-upload-item-progress-text">
+            <p>{{ vm.progress | number:0 }}% - {{ vm.loaded | fileSize }} of {{ vm.total | fileSize }}</p>
+            <span class="hs-upload-item-progress-text-bytes">{{ vm.loaded }} Bytes Uploaded</span>
+        </div>
+    </div>
+
+    <div data-ng-if="vm.includeMediaForm" class="row">
+        <div class="col-sm-12">
+            <button type="button" class="btn btn-default pull-right hs-collapse-toggle" data-ng-click="vm.isCollapsed = !vm.isCollapsed">
+                <i class="fa fa-2x fa-angle-down" data-ng-show="vm.isCollapsed"></i>
+                <i class="fa fa-2x fa-angle-up" data-ng-show="!vm.isCollapsed"></i>
+            </button>
+
+            <h2>Details</h2>
+
+            <div data-uib-collapse="vm.isCollapsed">
+                <hs-media-form media-id="{{ vm.mediaId }}"></hs-media-form>
+            </div>
+        </div>
+    </div>
+</section>

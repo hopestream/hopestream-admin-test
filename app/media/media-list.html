@@ -1,0 +1,76 @@
+<div class="container" data-ng-if="vm.state.media">
+    <button class="btn btn-primary pull-right hs-add-button" data-ui-sref="upload">Add Media</button>
+
+    <h1>Media</h1>
+
+    <div class="table-responsive hs-table">
+        <table id="media-list" class="display table table-bordered table-striped"
+            data-datatable="ng"
+            data-dt-options="vm.dtOptions"
+            data-dt-column-defs="vm.dtColumnDefs"
+            cellspacing="0"
+            width="100%">
+
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>UTC Timestamp</th>
+                    <th>Name</th>
+                    <th>Speakers</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tfoot>
+                <tr>
+                    <th>Date</th>
+                    <th>UTC Timestamp</th>
+                    <th>Name</th>
+                    <th>Speakers</th>
+                    <th>Status</th>
+                </tr>
+            </tfoot>
+
+            <tbody>
+                <tr data-ng-repeat="media in vm.state.media">
+                    <td>
+                        {{ media.date | date: 'MMM d, yyyy' }}
+                        <small>{{ media.date | date: 'EEEE h:mm a' }}</small>
+                    </td>
+
+                    <td>{{ media.date }}</td>
+
+                    <td>
+                        <div>
+                            <a data-ui-sref="media({ id: media.id })">{{ media.name ? media.name : 'Untitled' }}</a>
+                        </div>
+                        <div data-ng-if="media.seriesId && vm.state.seriesByID[media.seriesId]" data-ng-init="series = vm.state.seriesByID[media.seriesId]">
+                            {{ series.name ? series.name : 'Untitled' }}
+                        </div>
+                    </td>
+
+                    <td data-ng-if="media.speakerIds.length > 0">
+                        <div data-ng-repeat="speakerId in media.speakerIds" data-ng-init="speaker = vm.state.speakersByID[speakerId]">
+                            {{ speaker.name ? speaker.name : 'Untitled' }}
+                        </div>
+                    </td>
+                    <td data-ng-if="media.speakerIds.length == 0">
+                        <div>--</div>
+                    </td>
+
+                    <td>
+                        <hs-media-status status="{{ media.status }}"></hs-media-status>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="container" data-ng-if="!vm.state.media">
+    <section class="hs-loading-view">
+        <h1>Loading Media</h1>
+        <p class="lead">Please wait one moment.</p>
+        <span id="spinner" us-spinner></span>
+    </section>
+</div>

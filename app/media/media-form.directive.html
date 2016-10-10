@@ -1,0 +1,260 @@
+<section id="media-details-section-{{ mediaId }}" class="hs-form">
+    <form name="form" data-ng-if="vm.media" novalidate>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group" data-ng-class="{ 'has-error' : form.name.$invalid && form.name.$touched }">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" class="form-control" name="name" placeholder="Enter a name"
+                        data-ng-model="vm.media.name"
+                        data-ng-trim="true"
+                        data-ng-maxlength="128"
+                        required></input>
+
+                    <p class="help-block" data-ng-show="form.name.$invalid && form.name.$touched">
+                        Please enter a title.
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label>Series</label><br />
+                    <ul class="list-group" data-ng-if="vm.media.seriesId">
+                        <li class="list-group-item">
+                            {{ vm.state.seriesByID[vm.media.seriesId].name }}
+                            <button type="button" class="close" data-ng-click="vm.setSeries(undefined)"><span>&times;</span></button>
+                        </li>
+                    </ul>
+                    <button class="btn btn-default" data-ng-if="!vm.media.seriesId" data-toggle="modal" data-target="#set-series-modal">
+                        <i class="fa fa-plus"></i> &nbsp;Set Series
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <label for="date">Date</label>
+
+                    <div class="input-group">
+                        <input type="text" id="date" class="form-control" name="date"
+                            data-button-bar="vm.datetimePicker.buttonBar"
+                            data-datepicker-options="vm.datetimePicker.datePicker"
+                            data-datetime-picker="{{ vm.datetimePicker.format }}"
+                            data-is-open="vm.datetimePicker.isOpen"
+                            data-ng-focus="vm.datetimePicker.open($event)"
+                            data-ng-model="vm.datetimePicker.date"></input>
+
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" data-ng-click="vm.datetimePicker.open($event)">
+                                <i class="fa fa-calendar"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="includes">Include In</label><br />
+                    <ul class="list-group" data-ng-if="!vm.media.hidden || vm.feeds.length > 0">
+                        <li data-ng-if="!vm.media.hidden" class="list-group-item">
+                            HopeStream Mobile App
+                            <button type="button" class="close" data-ng-click="vm.removeFeedWithID(-1)"><span>&times;</span></button>
+                        </li>
+                        <li data-ng-repeat="feed in vm.feeds" class="list-group-item">
+                            {{ feed.title }} - {{ feed.type === 0 ? 'Video Podcast' : 'Audio Podcast' }}
+                            <button type="button" class="close" data-ng-click="vm.removeFeedWithID(feed.id)"><span>&times;</span></button>
+                        </li>
+                    </ul>
+                    <button class="btn btn-default" data-toggle="modal" data-target="#add-podcast-modal">
+                        <i class="fa fa-plus"></i> &nbsp;Add
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label>Speakers</label><br />
+                    <ul class="list-group" data-ng-if="vm.media.speakerIds.length">
+                        <li data-ng-repeat="speakerId in vm.media.speakerIds" class="list-group-item">
+                            {{ vm.state.speakersByID[speakerId].name }}
+                            <button type="button" class="close" data-ng-click="vm.removeSpeakerWithID(speakerId)"><span>&times;</span></button>
+                        </li>
+                    </ul>
+                    <button class="btn btn-default" data-ng-hide="vm.media.speakerIds.length >= 2" data-toggle="modal" data-target="#add-speaker-modal">
+                        <i class="fa fa-plus"></i> &nbsp;Add Speaker
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label>Topics</label><br />
+                    <ul class="list-group" data-ng-if="vm.media.topicIds.length">
+                        <li data-ng-repeat="topicId in vm.media.topicIds" class="list-group-item">
+                            {{ vm.state.topicsByID[topicId].name }}
+                            <button type="button" class="close" data-ng-click="vm.removeTopicWithID(topicId)"><span>&times;</span></button>
+                        </li>
+                    </ul>
+                    <button class="btn btn-default" data-ng-hide="vm.media.topicIds.length >= 3" data-toggle="modal" data-target="#add-topic-modal">
+                        <i class="fa fa-plus"></i> &nbsp;Add Topic
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" class="form-control" name="description" data-ng-model="vm.media.description" data-ng-trim="true" data-ng-maxlength="512" placeholder="Enter a description" rows="5"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <button  type="button" class="btn btn-primary" data-ng-disabled="form.$invalid || vm.saving || !vm.dirty" data-ng-click="vm.save()">Save</button>
+                <span class="hs-form-saving-text">
+                    {{ vm.saving ? "Saving Changes..." : vm.dirty ? "" : "All Changes Saved." }}
+                </span>
+            </div>
+        </div>
+    </form>
+</section>
+
+<!-- Modal for Set Series -->
+<div id="set-series-modal" class="modal" role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal"><span>&times;</span></button>
+                <h4 class="modal-title">Select A Series</h4>
+                <p>Series can be created on the Series page.</p>
+            </div>
+
+            <div class="modal-body">
+                <input type="text" class="form-control" data-ng-model="seriesFilter.name" data-ng-trim="true" placeholder="Search...">
+                <div class="hs-modal-selection-list">
+                    <ul data-vs-repeat class="form-group">
+                        <li data-ng-repeat="series in vm.state.series | filter: seriesFilter | orderBy: 'name'">
+                            <a data-ng-click="vm.setSeries(series)" data-dismiss="modal">
+                                <img data-ng-src="{{series.thumbnailUrl}}"></img>
+                                <span>{{series.name}}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Add Podcast -->
+<div id="add-podcast-modal" class="modal" role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal"><span>&times;</span></button>
+                <h4 class="modal-title">Select A Destination</h4>
+                <p>Podcasts can be created on the Podcasts page.</p>
+            </div>
+
+            <div class="modal-body">
+                <div class="hs-modal-selection-list">
+                    <ul>
+                        <li>
+                            <a data-ng-click="vm.addFeedWithID(-1)" data-dismiss="modal">
+                                <span>HopeStream Mobile App</span>
+                            </a>
+                        </li>
+                        <li data-ng-if="vm.media.status >= 0" data-ng-repeat="feed in vm.state.feeds | orderBy: 'name'">
+                            <a data-ng-click="vm.addFeedWithID(feed.id)" data-dismiss="modal">
+                                <span>{{ feed.title }} - {{ feed.type === 0 ? 'Video Podcast' : 'Audio Podcast' }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Add Speaker -->
+<div id="add-speaker-modal" class="modal" role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal"><span>&times;</span></button>
+                <h4 class="modal-title">Select A Speaker</h4>
+                <p>Speakers can be created on the Speakers page.</p>
+            </div>
+
+            <div class="modal-body">
+                <input type="text" class="form-control" data-ng-model="speakerFilter.name" data-ng-trim="true" placeholder="Search...">
+                <div class="hs-modal-selection-list">
+                    <ul data-vs-repeat>
+                        <li data-ng-repeat="speaker in vm.state.speakers | filter: speakerFilter | orderBy: 'name'">
+                            <a data-ng-click="vm.addSpeaker(speaker)" data-dismiss="modal">
+                                <img data-ng-src="{{speaker.thumbnailUrl}}"></img>
+                                <span>{{speaker.name}}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Add Topic -->
+<div id="add-topic-modal" class="modal" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal"><span>&times;</span></button>
+                <h4 class="modal-title">Select A Topic</h4>
+            </div>
+
+            <div class="modal-body clearfix">
+                <input type="text" class="form-control" data-ng-model="topicFilter.name" data-ng-trim="true" placeholder="Search...">
+                <div class="hs-modal-selection-list hs-topic-selection-list">
+                    <div class="col-sm-4" data-ng-repeat="column in vm.topicColumns">
+                        <div class="col-sm-12" data-ng-repeat="category in column">
+                            <label>{{ category }}</label>
+                            <ul>
+                                <li data-ng-repeat="topic in vm.state.topicsByCategory[category] | filter: topicFilter | orderBy: 'name'">
+                                    <a data-ng-click="vm.addTopic(topic)" data-dismiss="modal">
+                                        <span>{{ topic.name }}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
