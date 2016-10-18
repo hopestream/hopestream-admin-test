@@ -18,6 +18,8 @@ HopeStream.Media.fromJSON = function(json) {
     result.imageUrl = json.imageUrl;
     result.thumbnailUrl = json.thumbnailUrl;
     result.date = new Date(json.date);
+    result.title = json.title;
+    result.subtitle = json.subtitle;
 
     result.organizationId = json.organizationId;
     result.seriesId = json.seriesId;

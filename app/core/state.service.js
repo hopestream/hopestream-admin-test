@@ -59,8 +59,6 @@
         };
 
         function updateVisibleView() {
-            console.log("Evaluating Current State");
-            console.log($state.current.name);
             State.tab = TABS[$state.current.name];
 
             if (State.loggedIn && $state.current.name == 'login') {

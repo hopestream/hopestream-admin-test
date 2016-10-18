@@ -97,6 +97,39 @@
                     </div>
                 </div>
             </div>
+
+            <div data-ng-if="vm.media.imageUrl && vm.media.thumbnailUrl">
+                <h3>URLs</h3>
+
+                <div class="hs-media-url">
+                    <label>Image</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="{{ vm.media.imageUrl }}" readonly>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default hs-copy-url-button" data-clipboard data-text="vm.media.imageUrl"
+                                data-on-copied="vm.copyToClipboardSuccess()"
+                                data-on-error="vm.copyToClipboardError(error)">
+
+                                <i class="fa fa-clipboard"></i>&nbsp; Copy
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="hs-media-url">
+                    <label>Thumbnail</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="{{ vm.media.thumbnailUrl }}" readonly>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default hs-copy-url-button" data-clipboard data-text="vm.media.thumbnailUrl"
+                                data-on-copied="vm.copyToClipboardSuccess()"
+                                data-on-error="vm.copyToClipboardError(error)">
+
+                                <i class="fa fa-clipboard"></i>&nbsp; Copy
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 

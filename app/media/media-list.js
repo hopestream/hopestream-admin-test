@@ -23,9 +23,9 @@
 
             // Column width percentages
             DTColumnDefBuilder.newColumnDef(0).withOption('width', '20%'),
-            DTColumnDefBuilder.newColumnDef(2).withOption('width', '30%'),
-            DTColumnDefBuilder.newColumnDef(3).withOption('width', '30%'),
-            DTColumnDefBuilder.newColumnDef(4).withOption('width', '20%')
+            DTColumnDefBuilder.newColumnDef(2).withOption('width', '40%'),
+            DTColumnDefBuilder.newColumnDef(3).withOption('width', '25%'),
+            DTColumnDefBuilder.newColumnDef(4).withOption('width', '15%')
         ];
     }
 })();

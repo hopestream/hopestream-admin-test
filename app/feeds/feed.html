@@ -115,10 +115,10 @@
 
                                     <td>
                                         <div>
+                                            <span data-ng-if="media.seriesId && vm.state.seriesByID[media.seriesId]" data-ng-init="series = vm.state.seriesByID[media.seriesId]">
+                                                {{ series.name ? series.name : 'Untitled' }} -
+                                            </span>
                                             <a data-ui-sref="media({ id: media.id })">{{ media.name ? media.name : 'Untitled' }}</a>
-                                        </div>
-                                        <div data-ng-if="media.seriesId && vm.state.seriesByID[media.seriesId]" data-ng-init="series = vm.state.seriesByID[media.seriesId]">
-                                            {{ series.name ? series.name : 'Untitled' }}
                                         </div>
                                     </td>
 

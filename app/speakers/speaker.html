@@ -55,6 +55,39 @@
             <div class="col-sm-8 hs-media-image-section-preview" data-ng-if="vm.shouldShowImage">
                 <img class="img-responsive" alt="Poster Image" data-ng-src="{{ vm.imageUrl }}" data-hs-media-image>
             </div>
+
+            <div data-ng-if="vm.speaker.imageUrl && vm.speaker.thumbnailUrl">
+                <h3>URLs</h3>
+
+                <div class="hs-media-url">
+                    <label>Image</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="{{ vm.speaker.imageUrl }}" readonly>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default hs-copy-url-button" data-clipboard data-text="vm.speaker.imageUrl"
+                                data-on-copied="vm.copyToClipboardSuccess()"
+                                data-on-error="vm.copyToClipboardError(error)">
+
+                                <i class="fa fa-clipboard"></i>&nbsp; Copy
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="hs-media-url">
+                    <label>Thumbnail</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="{{ vm.speaker.thumbnailUrl }}" readonly>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default hs-copy-url-button" data-clipboard data-text="vm.speaker.thumbnailUrl"
+                                data-on-copied="vm.copyToClipboardSuccess()"
+                                data-on-error="vm.copyToClipboardError(error)">
+
+                                <i class="fa fa-clipboard"></i>&nbsp; Copy
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -111,10 +144,10 @@
 
                                     <td>
                                         <div>
+                                            <span data-ng-if="media.seriesId && vm.state.seriesByID[media.seriesId]" data-ng-init="series = vm.state.seriesByID[media.seriesId]">
+                                                {{ series.name ? series.name : 'Untitled' }} -
+                                            </span>
                                             <a data-ui-sref="media({ id: media.id })">{{ media.name ? media.name : 'Untitled' }}</a>
-                                        </div>
-                                        <div data-ng-if="media.seriesId && vm.state.seriesByID[media.seriesId]" data-ng-init="series = vm.state.seriesByID[media.seriesId]">
-                                            {{ series.name ? series.name : 'Untitled' }}
                                         </div>
                                     </td>
 
